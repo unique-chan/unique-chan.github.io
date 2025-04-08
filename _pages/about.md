@@ -19,9 +19,9 @@ announcements:
   limit: 5 # leave blank to include all the news in the `_news` folder
 
 latest_posts:
-  enabled: true
+  enabled: false
   scrollable: true # adds a vertical scroll bar if there are more than 3 new posts items
   limit: 3 # leave blank to include all the blog posts
 ---
 
-Yechan Kim received his B.S. degree (summa cum laude) from the College of Education at Jeju National University, South Korea, in February 2020, M.S. and Ph.D. degrees (cum laude) in the School of Electrical Engineering and Computer Science from GIST in August 2021 and February 2026, respectively. He is currently a postgraduate researcher at GIST Machine Learning and Vision Laboratory, supervised by Prof. Moongu Jeon. His current research interests include visual surveillance and multi-modal understanding.
+Yechan Kim received his B.S. degree (summa cum laude) from the College of Education at Jeju National University, South Korea, in February 2020, M.S. and Ph.D. degrees (cum laude) in the School of Electrical Engineering and Computer Science from GIST in August 2021 and February 2026, respectively. His current research interests include visual surveillance and multi-modal understanding.
