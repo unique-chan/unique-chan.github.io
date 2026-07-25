@@ -14,6 +14,27 @@ export type Publication = {
 };
 
 export const publications: Publication[] = [
+    {
+    title: "ShadowCast: Learning-Free Shadow Augmentation for Remote Sensing Image Segmentation",
+    authors: "Dongho Yoon, Yechan Kim✝, Namhoon Jung, Moongu Jeon",
+    venue: "Submitted to IEEE",
+    year: 2026,
+    type: "Preprint",
+    // image: "/paper_snapshots/gmad.png",
+    // imageAlt: "-",
+    // ranking: "CORE A*",
+    // citations: 0,
+    tags: ["Semantic Segmentation"],
+    links: [
+      // { label: "Paper", href: "https://doi.org/10.1145/3767308.3834743" },
+      // { label: "Code", href: "https://unique-chan.github.io/G-MAD-Project/" },
+      // { label: "Dataset", href: "https://unique-chan.github.io/AMOD-Project/" }
+
+    ],
+    featured: true
+  },
+
+
   {
     title: "G-MAD: A Game-Based Data Generation Framework for Multi-View RGB-T Aerial Object Detection",
     authors: "Yechan Kim, JongHyun Park, Dongho Yoon, Namhoon Jung, Moongu Jeon",
@@ -76,7 +97,7 @@ export const publications: Publication[] = [
     venue: "IEEE Sensors Journal",
     year: 2025,
     type: "Journal",
-    // image: "/publications/resource-efficient.png",
+        image: "/paper_snapshots/sens.jpg",
     // imageAlt: "-",
     ranking: "Q1",
     tags: ["Image Classification" ],
@@ -88,11 +109,30 @@ export const publications: Publication[] = [
 
 
     {
+    title: "Investigating Long-term Training for Remote Sensing Object Detection",
+    authors: "JongHyun Park, Yechan Kim✝, Moongu Jeon",
+    venue: "Machine Vision and Applications (MVA)",
+    year: 2025,
+    type: "Journal",
+        // image: "/paper_snapshots/sens.jpg",
+    // imageAlt: "-",
+    // ranking: "Q1",
+    tags: ["Object Detection" ],
+    links: [
+      { label: "Paper", href: "https://doi.org/10.1007/s00138-025-01747-z" },
+      { label: "Code", href: "https://github.com/unique-chan/dbf" }
+    ],
+    featured: false
+  },
+
+
+    {
     title: "Learning to remove bad weather: towards robust visual perception for self-driving",
     authors: "Younkwan Lee, Yechan Kim, Jongmin Yu, Moongu Jeon",
     venue: "IEEE Robotics and Automation Letters (RA-L) (⭐ ICRA Presentation)",
     year: 2022,
     type: "Journal",
+            image: "/paper_snapshots/ral-bad.png",
     // image: "/publications/learning-to-remove-bad-weather.png",
     // imageAlt: "-",
     // ranking: "Q1",
