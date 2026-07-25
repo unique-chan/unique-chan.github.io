@@ -20,7 +20,7 @@ export const publications: Publication[] = [
     venue: "ACM International Conference on Multimedia (MM)",
     year: 2026,
     type: "Conference",
-    // image: "/publications/g-mad.png",
+    image: "/paper_snapshots/gmad.png",
     // imageAlt: "-",
     ranking: "CORE A*",
     // citations: 0,
@@ -40,13 +40,13 @@ export const publications: Publication[] = [
     venue: "IEEE Geoscience and Remote Sensing Letters (GRSL)",
     year: 2025,
     type: "Journal",
-    // image: "/publications/nsegment.png",
+    image: "/paper_snapshots/nseg.png",
     // imageAlt: "-",
     ranking: "Q1",
     tags: ["Semantic Segmentation" ],
     links: [
       { label: "Paper", href: "https://doi.org/10.1109/LGRS.2025.3595851" },
-      { label: "Code", href: "https://unique-chan.github.io/G-MAD-Project/" }
+      { label: "Code", href: "https://github.com/unique-chan/nsegment" }
     ],
     featured: true
   },
@@ -58,7 +58,7 @@ export const publications: Publication[] = [
     venue: "IEEE Geoscience and Remote Sensing Letters (GRSL)",
     year: 2025,
     type: "Journal",
-    // image: "/publications/nbbox.png",
+    image: "/paper_snapshots/nbbox.png",
     // imageAlt: "-",
     ranking: "Q1",
     tags: ["Object Detection" ],
