@@ -1,0 +1,62 @@
+---
+import type { Publication } from "../data/publications";
+import { site } from "../config";
+
+interface Props {
+  publication: Publication;
+}
+
+const { publication: pub } = Astro.props;
+const authorSegments = pub.authors.split(site.fullName);
+---
+
+<article class:list={["publication", { featured: pub.featured }]} data-publication-type={pub.type}>
+  <div class="publication-media">
+    {pub.image ? (
+      <img
+        src={pub.image}
+        alt={pub.imageAlt ?? `Visual summary for ${pub.title}`}
+        loading="lazy"
+      />
+    ) : (
+      <div
+        class="publication-placeholder"
+        role="img"
+        aria-label={`Default research graphic for ${pub.title}`}
+      >
+        <span>{pub.type}</span>
+        <strong aria-hidden="true">R/</strong>
+      </div>
+    )}
+  </div>
+  <div>
+    <div class="publication-tags">
+      <span class="publication-type">{pub.type}</span>
+      {pub.ranking && (
+        <span class="ranking-badge" title={`Venue ranking · ${pub.ranking}`}>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m12 2.8 2.75 5.57 6.15.9-4.45 4.33 1.05 6.12L12 16.83l-5.5 2.89 1.05-6.12L3.1 9.27l6.15-.9L12 2.8Z" />
+          </svg>
+          <strong>{pub.ranking}</strong>
+        </span>
+      )}
+      {pub.tags?.map((tag) => <span class="status">{tag}</span>)}
+    </div>
+    <h3>{pub.title}</h3>
+    <p class="authors">
+      {authorSegments.map((segment, index) => (
+        <Fragment>
+          {index > 0 && <strong>{site.fullName}</strong>}
+          {segment}
+        </Fragment>
+      ))}
+    </p>
+    <p class="venue">{pub.venue}</p>
+    <div class="text-links">
+      {pub.links.map((link) => <a href={link.href}>{link.label} <span aria-hidden="true">↗</span></a>)}
+      {pub.citations !== undefined && (
+        <span class="citation-count">Cited by {pub.citations}+</span>
+      )}
+    </div>
+  </div>
+</article>

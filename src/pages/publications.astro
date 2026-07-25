@@ -1,0 +1,70 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PublicationCard from "../components/PublicationCard.astro";
+import { publications } from "../data/publications";
+
+const visiblePublications = publications.filter(
+  (publication) => publication.type === "Conference" || publication.type === "Journal"
+);
+const years = [...new Set(visiblePublications.map((publication) => publication.year))].sort(
+  (a, b) => b - a
+);
+const types = ["All", "Conference", "Journal"];
+---
+
+<BaseLayout title="Publications" description="Peer-reviewed papers, preprints, and research artifacts.">
+  <section class="page-intro page-shell">
+    <p class="eyebrow">Research output</p>
+    <h1>Publications</h1>
+    <p class="lede">Peer-reviewed papers</p>
+  </section>
+  <section class="page-shell">
+    <div class="publication-filters" aria-label="Filter publications by type">
+      {types.map((type, index) => (
+        <button
+          type="button"
+          data-publication-filter={type}
+          aria-pressed={index === 0 ? "true" : "false"}
+        >
+          {type === "All" ? "All (Conference + Journal)" : type}
+        </button>
+      ))}
+    </div>
+    {years.map((year) => (
+      <div class="year-group" data-year-group>
+        <h2>{year}</h2>
+        <div class="publication-list">
+          {
+            visiblePublications
+              .filter((publication) => publication.year === year)
+              .map((publication) => <PublicationCard publication={publication} />)
+          }
+        </div>
+      </div>
+    ))}
+  </section>
+  <script>
+    const filterButtons = document.querySelectorAll<HTMLButtonElement>("[data-publication-filter]");
+    const publicationCards = document.querySelectorAll<HTMLElement>("[data-publication-type]");
+    const yearGroups = document.querySelectorAll<HTMLElement>("[data-year-group]");
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const selectedType = button.dataset.publicationFilter ?? "All";
+
+        filterButtons.forEach((item) => {
+          item.setAttribute("aria-pressed", String(item === button));
+        });
+
+        publicationCards.forEach((card) => {
+          card.hidden = selectedType !== "All" && card.dataset.publicationType !== selectedType;
+        });
+
+        yearGroups.forEach((group) => {
+          const visibleCards = group.querySelectorAll<HTMLElement>("[data-publication-type]:not([hidden])");
+          group.hidden = visibleCards.length === 0;
+        });
+      });
+    });
+  </script>
+</BaseLayout>

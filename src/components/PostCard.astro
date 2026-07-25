@@ -1,0 +1,30 @@
+---
+interface Props {
+  slug: string;
+  title: string;
+  description: string;
+  publishedAt: Date;
+  tags: string[];
+  language?: string;
+}
+
+const { slug, title, description, publishedAt, tags, language = "en" } = Astro.props;
+const formattedDate = publishedAt.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "short",
+  day: "numeric"
+});
+---
+
+<article class="post-card">
+  <div class="post-meta">
+    <time datetime={publishedAt.toISOString()}>{formattedDate}</time>
+    <span>{language.toUpperCase()}</span>
+  </div>
+  <h3><a href={`/blog/${slug}/`}>{title}</a></h3>
+  <p>{description}</p>
+  <div class="tag-list">
+    {tags.map((tag) => <span>{tag}</span>)}
+  </div>
+</article>
+

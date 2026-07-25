@@ -1,0 +1,33 @@
+---
+import { site } from "../config";
+
+const pathname = Astro.url.pathname;
+const links = [
+  { href: "/research", label: "Research" },
+  { href: "/publications", label: "Publications" },
+  { href: "/blog", label: "Notes" },
+  { href: "/cv", label: "CV" }
+];
+---
+
+<header class="site-header">
+  <a class="wordmark" href="/" aria-label={`${site.fullName}, home`}>
+    <span class="wordmark-mark" aria-hidden="true">C/</span>
+    <span>{site.name}</span>
+  </a>
+  <nav aria-label="Primary navigation">
+    {
+      links.map((link) => (
+        <a href={link.href} aria-current={pathname.startsWith(link.href) ? "page" : undefined}>
+          {link.label}
+        </a>
+      ))
+    }
+  </nav>
+  <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 3v2m0 14v2M3 12h2m14 0h2M5.64 5.64l1.42 1.42m9.88 9.88 1.42 1.42m0-12.72-1.42 1.42M7.06 16.94l-1.42 1.42M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" />
+    </svg>
+  </button>
+</header>
+

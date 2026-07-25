@@ -1,0 +1,20 @@
+---
+import { site } from "../config";
+---
+
+<footer class="site-footer">
+  <div>
+    <p class="eyebrow">Let’s make ideas testable.</p>
+    <div class="footer-emails">
+      {site.emails.map((email) => <a class="footer-email" href={`mailto:${email}`}>{email}</a>)}
+    </div>
+  </div>
+  <div class="footer-meta">
+    <div class="social-links">
+      <a href={site.scholar}>Scholar</a>
+      <a href={site.github}>GitHub</a>
+      <a href={site.orcid}>ORCID</a>
+    </div>
+    <p>© {new Date().getFullYear()} {site.fullName}. Built with Astro.</p>
+  </div>
+</footer>

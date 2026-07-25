@@ -1,0 +1,131 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { site } from "../config";
+---
+
+<BaseLayout title="CV" description={`Curriculum vitae of ${site.fullName}.`}>
+  <section class="page-intro page-shell cv-intro">
+    <div>
+      <p class="eyebrow">Curriculum vitae</p>
+      <h1>{site.fullName}</h1>
+    </div>
+<!--    <button class="print-button" type="button" onclick="window.print()">Print / save PDF</button> -->
+  </section>
+  <section class="page-shell cv-grid">
+    <aside>
+      <div class="cv-affiliation">
+        <span>Affiliation</span>
+        <p>{site.institution}</p>
+        <span>Location</span>
+        <p>{site.location}</p>
+      </div>
+      {site.emails.map((email) => <a href={`mailto:${email}`}>{email}</a>)}
+      <a href={site.github}>GitHub</a>
+      <a href={site.scholar}>Google Scholar</a>
+    </aside>
+    <div class="cv-main">
+      <section>
+        <h2>Research interests</h2>
+        <p>AI, Vision, Multi-modal Learning, Visual Understanding, Surveillance </p>
+      </section>
+      <section>
+        <h2>Education</h2>
+        <div class="cv-item">
+          <div><h3>Ph.D. in EECS</h3><p>Gwangju Institute of Science and Technology (GIST) · Advisor: Prof. Moongu Jeon</p>
+            <p class="cv-thesis">
+              <span>Dissertation</span>
+              <cite>Learning for Visual Understanding: A Data-Centric Perspective 🏅</cite>
+            </p>
+          </div>
+          <span>2021 — 2026</span>
+        </div>
+        <div class="cv-item">
+          <div><h3>M.S. in EECS</h3><p>Gwangju Institute of Science and Technology (GIST) · Advisor: Prof. Moongu Jeon</p>
+          
+          <p class="cv-thesis">
+              <span>Master’s Thesis</span>
+              <cite>Rethinking Softmax Cross Entropy for Imbalanced Image Classification</cite>
+            </p>
+
+          </div>
+          <span>2020 — 2021</span>
+        </div>
+
+        <div class="cv-item">
+          <div><h3>B.Ed.</h3><p>College of Education in Jeju National University </p></div>
+          <span>2016 — 2020</span>
+        </div>
+
+      </section>
+      <section>
+        <h2>Experience</h2>
+        <div class="cv-item">
+          <div><h3>Research Engineer</h3><p>LIG Defense&Aerospace - AI Laboratory (Pangyo House) · Korea</p></div>
+          <span>2026 — Present</span>
+        </div>
+
+
+        <div class="cv-item">
+          <div><h3>Graduate Student Researcher (Research Assistant)</h3><p>GIST Machine Learning and Vision Laboratory · Korea</p></div>
+          <span>2020 — 2026</span>
+        </div>
+      </section>
+      <section>
+        <h2>Selected honors</h2>
+
+        <div class="cv-item">
+          <div><h3>Outstanding Research Award in GIST Commencement Ceremony</h3><p>President's award (Top-ranked alumnus among all EECS alumni)</p></div>
+          <span>2026</span>
+        </div>
+
+        <div class="cv-item">
+          <div><h3>Corporate-Sponsored Scholarship Awardee by LIG Defense&Aerospace</h3><p>Top-ranked student in SW/AI section</p></div>
+          <span>2026</span>
+        </div>
+
+
+        <div class="cv-item">
+          <div><h3>Scholarship Awardee by GIST EECS</h3><p>Top-ranked research scholarship recipient</p></div>
+          <span>2025</span>
+        </div>
+
+        <div class="cv-item">
+          <div><h3>Scholarship Awardee by GIST EECS</h3><p>Top-ranked academic merit scholarship recipient</p></div>
+          <span>2022</span>
+        </div>
+
+
+        <div class="cv-item">
+          <div><h3>Scholarship Awardee by KEPCO (한국전력공사)</h3><p>Representative of GIST (EECS) (1,000,000won)</p></div>
+          <span>2021</span>
+        </div>
+
+
+        <div class="cv-item">
+          <div><h3>Summa Cum Laude in JNU Commencement Ceremony</h3><p>President's award (Top-ranked alumnus among all alumni)</p></div>
+          <span>2020</span>
+        </div>
+
+
+        <div class="cv-item">
+          <div><h3>Scholarship Awardee by Ms. Ko Chuwol, an Honorary Doctor in JNU (고추월 명예박사 장학금)</h3><p>Recipient of the KRW 50,000,000 scholarship funded by Ms. Ko Chuwol, an honorary doctorate recipient in Business Administration from Jeju National University (5,000,000won)</p></div>
+          <span>2018</span>
+        </div>
+
+
+        <div class="cv-item">
+          <div><h3>Scholarship Awardee by Kakao</h3><p>Top-ranked student in the Kakao's Web Developer Track minor (2,000,000won)</p></div>
+          <span>2018</span>
+        </div>
+
+
+        <div class="cv-item">
+          <div><h3>Full-Tuition Scholarship Awarded by The Scholarship Foundation for Future Leaders (교육부-미래인재육성재단 전액 등록금 지원 및 학업장려금 장학생)</h3>
+          <p>Selected for a three-year full-tuition scholarship for my B.Ed. course</p></div>
+          <span>2017-2019</span>
+        </div>
+
+      </section>
+    </div>
+  </section>
+</BaseLayout>

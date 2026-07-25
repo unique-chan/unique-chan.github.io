@@ -1,0 +1,25 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { projects } from "../data/projects";
+---
+
+<BaseLayout title="Research" description="Research directions and ongoing projects.">
+  <section class="page-intro page-shell">
+    <p class="eyebrow">What I work on</p>
+    <h1>Research</h1>
+    <p class="lede">for machine intelligence</p>
+  </section>
+  <section class="page-shell research-list">
+    {projects.map((project) => (
+      <article>
+        <span class="project-index">{project.index}</span>
+        <div>
+          <h2>{project.title}</h2>
+          <p>{project.description}</p>
+          <div class="tag-list">{project.tags.map((tag) => <span>{tag}</span>)}</div>
+        </div>
+      </article>
+    ))}
+  </section>
+</BaseLayout>
+

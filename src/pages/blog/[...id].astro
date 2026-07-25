@@ -1,0 +1,43 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export const getStaticPaths = (async () => {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}) satisfies GetStaticPaths;
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const formattedDate = post.data.publishedAt.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric"
+});
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <article class="article page-shell">
+    <header class="article-header">
+      <a class="back-link" href="/blog">← All notes</a>
+      <div class="post-meta">
+        <time datetime={post.data.publishedAt.toISOString()}>{formattedDate}</time>
+        <span>{post.data.language.toUpperCase()}</span>
+      </div>
+      <h1>{post.data.title}</h1>
+      <p>{post.data.description}</p>
+      <div class="tag-list">{post.data.tags.map((tag: string) => <span>{tag}</span>)}</div>
+    </header>
+    <div class="article-layout">
+      <div class="prose"><Content /></div>
+      {headings.length > 1 && (
+        <aside class="toc">
+          <p class="eyebrow">On this page</p>
+          {headings.map((heading) => <a href={`#${heading.slug}`}>{heading.text}</a>)}
+        </aside>
+      )}
+    </div>
+  </article>
+</BaseLayout>
+

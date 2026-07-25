@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostCard from "../../components/PostCard.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+---
+
+<BaseLayout title="Notes" description="Research notes, technical writing, and ideas in progress.">
+  <section class="page-intro page-shell">
+    <p class="eyebrow">Ideas in progress</p>
+    <h1>Notes</h1>
+    <p class="lede">Research notes, technical writing, and ideas in progress</p>
+  </section>
+  <section class="page-shell post-grid blog-list">
+    {posts.map((post) => (
+      <PostCard
+        slug={post.id}
+        title={post.data.title}
+        description={post.data.description}
+        publishedAt={post.data.publishedAt}
+        tags={post.data.tags}
+        language={post.data.language}
+      />
+    ))}
+  </section>
+</BaseLayout>
+
