@@ -154,7 +154,7 @@ export const publications: Publication[] = [
     type: "Conference",
     image: "/paper_snapshots/gmad.png",
     // imageAlt: "-",
-    ranking: "CORE A*",
+    ranking: "CORE A* | CCF A",
     // citations: 0,
     tags: ["Object Detection", "RGB-T", "Multi-View", "Benchmark"],
     links: [
@@ -176,7 +176,7 @@ export const publications: Publication[] = [
     type: "Conference",
     image: "/paper_snapshots/fg-face.png",
     // imageAlt: "-",
-    ranking: "CORE B",
+    ranking: "CORE B | CCF C",
     // citations: 0,
     tags: ["Face Swapping", "Real-time", "Video Processing"],
     links: [
@@ -247,7 +247,7 @@ export const publications: Publication[] = [
     type: "Journal",
         image: "/paper_snapshots/dbf.png",
     // imageAlt: "-",
-    // ranking: "Q1",
+    // ranking: "CCF C",
     tags: ["Object Detection", "Fine-tuning" ],
     links: [
       { label: "Paper", href: "https://doi.org/10.1007/s00138-025-01747-z" },
@@ -282,7 +282,7 @@ export const publications: Publication[] = [
     type: "Conference",
     image: "/paper_snapshots/icra_younkwan.png",
     // imageAlt: "-",
-    ranking: "CORE A*",
+    ranking: "CORE A* | CCF B",
     tags: ["Object Detection", "Enhancement", "Depth Estimation", "Contrastive Learning" ],
     links: [
       { label: "Paper", href: "https://doi.org/10.1109/ICRA46639.2022.9811870" },
