@@ -14,6 +14,8 @@ export type Publication = {
 };
 
 export const publications: Publication[] = [
+
+
     {
     title: "[Double Blind]",
     authors: "Yechan Kim, Dongho Yoon, Younkwan Lee, Wei Cheng, Juhua Hu, Moongu Jeon",
@@ -53,6 +55,99 @@ export const publications: Publication[] = [
     ],
     featured: false
   },
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  {
+    title: "NSegment+: Scale-aware Label-only Elastic Deformations for Semantic Segmentation",
+    authors: "Yechan Kim, Dongho Yoon, Unse Fatima, Jongmin Joo, SungHeon Kim, JongHyun Park, Mingi Lee, Moongu Jeon",
+    venue: "Annual AAAI Conference on Artificial Intelligence (AAAI) - AI4UP Workshop",
+    year: 2026,
+    type: "Workshop",
+    // image: "/paper_snapshots/gmad.png",
+    // imageAlt: "-",
+    // ranking: "CORE A*",
+    // citations: 0,
+    tags: ["Semantic Segmentation", "Change Detection", "Label Uncertainty"],
+    links: [
+      // { label: "Paper", href: "https://doi.org/10.1145/3767308.3834743" },
+      // { label: "Code", href: "https://unique-chan.github.io/G-MAD-Project/" },
+      // { label: "Dataset", href: "https://unique-chan.github.io/AMOD-Project/" }
+
+    ],
+    featured: false
+  },
+
+
+  
+  {
+    title: "Towards Large-scale Benchmark Dataset for Remote Sensing Object Detection on Battlefield",
+    authors: "Yechan Kim, JongHyun Park, Sihyun Kim, SeongHeon Kim, SooYeon Kim, YeongMin Ko, Junggyun Oh, Moongu Jeon,",
+    venue: "IEEE International Conference on Consumer Electronics-Asia (ICCE-Asia)",
+    year: 2024,
+    type: "Workshop",
+    // image: "/paper_snapshots/gmad.png",
+    // imageAlt: "-",
+    // ranking: "CORE A*",
+    // citations: 0,
+    tags: ["Object Detection", "Benchmark"],
+    links: [
+      // { label: "Paper", href: "https://doi.org/10.1145/3767308.3834743" },
+      // { label: "Code", href: "https://unique-chan.github.io/G-MAD-Project/" },
+      // { label: "Dataset", href: "https://unique-chan.github.io/AMOD-Project/" }
+
+    ],
+    featured: false
+  },
+
+
+  {
+    title: "Social Media Tri-Domain Analysis for Detection of Potential/Likely Malicious Users",
+    authors: "Zafran Khan, Yechan Kim, Yeonsu Seul, Moongu Jeon,",
+    venue: "International Conference on Intelligent and Fuzzy Systems (INFUS)",
+    year: 2023,
+    type: "Workshop",
+    // image: "/paper_snapshots/gmad.png",
+    // imageAlt: "-",
+    // ranking: "CORE A*",
+    // citations: 0,
+    tags: ["Social Media Analysis", "Malicious User Detection", "Tri-Domain Analysis"],
+    links: [
+      // { label: "Paper", href: "https://doi.org/10.1145/3767308.3834743" },
+      // { label: "Code", href: "https://unique-chan.github.io/G-MAD-Project/" },
+      // { label: "Dataset", href: "https://unique-chan.github.io/AMOD-Project/" }
+
+    ],
+    featured: false
+  },
+
+
+
+    {
+    title: "Self-Supervised Attribute-Aware Refinement Network for Low-Quality Text Recognition",
+    authors: "Younkwan Lee, Hyeonjun Yoo, Yechan Kim, Jihun Jeong, Moongu Jeon",
+    venue: "European Conference on Computer Vision (ECCV) - RLQ Workshop",
+    year: 2020,
+    type: "Workshop",
+    // image: "/paper_snapshots/gmad.png",
+    // imageAlt: "-",
+    // ranking: "CORE A*",
+    // citations: 0,
+    tags: ["Text Recognition", "Self-Supervised Learning", "Refinement"],
+    links: [
+      // { label: "Paper", href: "https://doi.org/10.1145/3767308.3834743" },
+      // { label: "Code", href: "https://unique-chan.github.io/G-MAD-Project/" },
+      // { label: "Dataset", href: "https://unique-chan.github.io/AMOD-Project/" }
+
+    ],
+    featured: false
+  },
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 
 
   {
