@@ -146,10 +146,6 @@ export const publications: Publication[] = [
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-
-
-
   {
     title: "G-MAD: A Game-Based Data Generation Framework for Multi-View RGB-T Aerial Object Detection",
     authors: "Yechan Kim, JongHyun Park, Dongho Yoon, Namhoon Jung, Moongu Jeon",
@@ -168,6 +164,26 @@ export const publications: Publication[] = [
 
     ],
     featured: true
+  },
+
+
+
+  {
+    title: "High Fidelity and Real-time Video Face Swapping",
+    authors: "Jongmin Yu, Hyeontaek Oh, Jangwon Lee, Yechan Kim, Moongu Jeon, Jinhong Yang",
+    venue: "IEEE International Conference on Automatic Face and Gesture Recognition (FG)",
+    year: 2026,
+    type: "Conference",
+    image: "/paper_snapshots/fg-face.png",
+    // imageAlt: "-",
+    ranking: "CORE B",
+    // citations: 0,
+    tags: ["Face Swapping", "Real-time", "Video Processing"],
+    links: [
+      { label: "Paper", href: "https://doi.org/10.1109/FG67764.2026.11557069" },
+
+    ],
+    featured: false
   },
 
   {

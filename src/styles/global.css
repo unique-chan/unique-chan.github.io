@@ -74,11 +74,14 @@ button { font: inherit; }
   gap: clamp(2rem, 5vw, 5rem);
   align-items: center;
 }
-.hero-portrait { margin: 0; }
+.hero-portrait {
+  margin: 0;
+  aspect-ratio: 1;
+}
 .hero-portrait img {
   display: block;
   width: 100%;
-  aspect-ratio: 1;
+  height: 100%;
   object-fit: cover;
   object-position: center 34%;
   border: 1px solid var(--line);
