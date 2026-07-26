@@ -147,7 +147,7 @@ export const publications: Publication[] = [
 
 
     {
-    title: "Learning to remove bad weather: towards robust visual perception for self-driving",
+    title: "Learning to Remove Bad Weather: Towards Robust Visual Perception for Self-Driving",
     authors: "Younkwan Lee, Yechan Kim, Jongmin Yu, Moongu Jeon",
     venue: "IEEE Robotics and Automation Letters (RA-L) (⭐ ICRA Presentation)",
     year: 2022,
@@ -164,7 +164,7 @@ export const publications: Publication[] = [
   },
 
       {
-    title: "Perception-friendly video enhancement for autonomous driving under adverse weather conditions",
+    title: "Perception-Friendly Video Enhancement for Autonomous Driving under Adverse Weather Conditions",
     authors: "Younkwan Lee, Yeongmin Ko, Yechan Kim, Moongu Jeon",
     venue: "IEEE International Conference on Robotics and Automation (ICRA)",
     year: 2022,
@@ -182,7 +182,7 @@ export const publications: Publication[] = [
 
 
       {
-    title: "Imbalanced image classification with complement cross entropy",
+    title: "Imbalanced Image Classification with Complement Cross Entropy",
     authors: "Yechan Kim, Younkwan Lee, Moongu Jeon",
     venue: "Pattern Recognition Letters (PRL)",
     year: 2021,
