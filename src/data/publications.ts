@@ -15,6 +15,26 @@ export type Publication = {
 
 export const publications: Publication[] = [
     {
+    title: "[Double Blind]",
+    authors: "Yechan Kim, Dongho Yoon, Younkwan Lee, Wei Cheng, Juhua Hu, Moongu Jeon",
+    venue: "Submitted to IEEE",
+    year: 2026,
+    type: "Preprint",
+    // image: "/paper_snapshots/gmad.png",
+    // imageAlt: "-",
+    // ranking: "CORE A*",
+    // citations: 0,
+    tags: ["Semantic Segmentation", "Change Detection", "Label Uncertainty"],
+    links: [
+      // { label: "Paper", href: "https://doi.org/10.1145/3767308.3834743" },
+      // { label: "Code", href: "https://unique-chan.github.io/G-MAD-Project/" },
+      // { label: "Dataset", href: "https://unique-chan.github.io/AMOD-Project/" }
+
+    ],
+    featured: false
+  },
+
+    {
     title: "ShadowCast: Learning-Free Shadow Augmentation for Remote Sensing Image Segmentation",
     authors: "Dongho Yoon, Yechan Kim✝, Namhoon Jung, Moongu Jeon",
     venue: "Submitted to IEEE",
@@ -24,14 +44,14 @@ export const publications: Publication[] = [
     // imageAlt: "-",
     // ranking: "CORE A*",
     // citations: 0,
-    tags: ["Semantic Segmentation"],
+    tags: ["Semantic Segmentation", "Change Detection", "Augmentation"],
     links: [
       // { label: "Paper", href: "https://doi.org/10.1145/3767308.3834743" },
       // { label: "Code", href: "https://unique-chan.github.io/G-MAD-Project/" },
       // { label: "Dataset", href: "https://unique-chan.github.io/AMOD-Project/" }
 
     ],
-    featured: true
+    featured: false
   },
 
 
@@ -45,7 +65,7 @@ export const publications: Publication[] = [
     // imageAlt: "-",
     ranking: "CORE A*",
     // citations: 0,
-    tags: ["Object Detection" ],
+    tags: ["Object Detection", "RGB-T", "Multi-View", "Benchmark"],
     links: [
       { label: "Paper", href: "https://doi.org/10.1145/3767308.3834743" },
       { label: "Code", href: "https://unique-chan.github.io/G-MAD-Project/" },
@@ -64,7 +84,7 @@ export const publications: Publication[] = [
     image: "/paper_snapshots/nseg.png",
     // imageAlt: "-",
     ranking: "Q1",
-    tags: ["Semantic Segmentation" ],
+    tags: ["Semantic Segmentation", "Label Uncertainty" ],
     links: [
       { label: "Paper", href: "https://doi.org/10.1109/LGRS.2025.3595851" },
       { label: "Code", href: "https://github.com/unique-chan/nsegment" }
@@ -82,7 +102,7 @@ export const publications: Publication[] = [
     image: "/paper_snapshots/nbbox.png",
     // imageAlt: "-",
     ranking: "Q1",
-    tags: ["Object Detection" ],
+    tags: ["Object Detection", "Label Uncertainty" ],
     links: [
       { label: "Paper", href: "https://doi.org/10.1109/LGRS.2025.3527712" },
       { label: "Code", href: "https://github.com/unique-chan/NBBOX" }
@@ -100,7 +120,7 @@ export const publications: Publication[] = [
         image: "/paper_snapshots/sens.jpg",
     // imageAlt: "-",
     ranking: "Q1",
-    tags: ["Image Classification" ],
+    tags: ["Image Classification", "Lightweight" ],
     links: [
       { label: "Paper", href: "https://doi.org/10.1109/JSEN.2025.3595936" },
     ],
@@ -114,10 +134,10 @@ export const publications: Publication[] = [
     venue: "Machine Vision and Applications (MVA)",
     year: 2025,
     type: "Journal",
-        // image: "/paper_snapshots/sens.jpg",
+        image: "/paper_snapshots/dbf.png",
     // imageAlt: "-",
     // ranking: "Q1",
-    tags: ["Object Detection" ],
+    tags: ["Object Detection", "Fine-tuning" ],
     links: [
       { label: "Paper", href: "https://doi.org/10.1007/s00138-025-01747-z" },
       { label: "Code", href: "https://github.com/unique-chan/dbf" }
@@ -149,7 +169,7 @@ export const publications: Publication[] = [
     venue: "IEEE International Conference on Robotics and Automation (ICRA)",
     year: 2022,
     type: "Conference",
-    // image: "/publications/learning-to-remove-bad-weather.png",
+    image: "/paper_snapshots/icra_younkwan.png",
     // imageAlt: "-",
     ranking: "CORE A*",
     tags: ["Object Detection", "Enhancement", "Depth Estimation", "Contrastive Learning" ],
@@ -167,7 +187,7 @@ export const publications: Publication[] = [
     venue: "Pattern Recognition Letters (PRL)",
     year: 2021,
     type: "Journal",
-    // image: "/publications/learning-to-remove-bad-weather.png",
+    image: "/paper_snapshots/cce.png",
     // imageAlt: "-",
     // ranking: "Q1",
     tags: ["Imbalanced Learning", "Image Classification" ],
