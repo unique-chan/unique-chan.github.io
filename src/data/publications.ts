@@ -159,6 +159,7 @@ export const publications: Publication[] = [
     tags: ["Object Detection", "RGB-T", "Multi-View", "Benchmark"],
     links: [
       { label: "Paper", href: "https://doi.org/10.1145/3767308.3834743" },
+      { label: "Supp. Material (Arxiv)", href: "https://arxiv.org/pdf/2607.19942" },
       { label: "Code", href: "https://unique-chan.github.io/G-MAD-Project/" },
       { label: "Dataset", href: "https://unique-chan.github.io/AMOD-Project/" }
 
@@ -198,6 +199,7 @@ export const publications: Publication[] = [
     tags: ["Semantic Segmentation", "Label Uncertainty" ],
     links: [
       { label: "Paper", href: "https://doi.org/10.1109/LGRS.2025.3595851" },
+      { label: "Supp. Material (Arxiv)", href: "https://arxiv.org/abs/2504.19634" },
       { label: "Code", href: "https://github.com/unique-chan/nsegment" }
     ],
     featured: true
@@ -216,6 +218,7 @@ export const publications: Publication[] = [
     tags: ["Object Detection", "Label Uncertainty" ],
     links: [
       { label: "Paper", href: "https://doi.org/10.1109/LGRS.2025.3527712" },
+      { label: "Supp. Material (Arxiv)", href: "https://arxiv.org/abs/2409.09424" },
       { label: "Code", href: "https://github.com/unique-chan/NBBOX" }
     ],
     featured: true
