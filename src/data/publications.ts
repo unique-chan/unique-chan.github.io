@@ -37,8 +37,8 @@ export const publications: Publication[] = [
   },
 
     {
-    title: "ShadowCast: Learning-Free Shadow Augmentation for Remote Sensing Image Segmentation",
-    authors: "Dongho Yoon, Yechan Kim✝, Namhoon Jung, Moongu Jeon",
+    title: "ShadowCast: On-the-Fly Context-Aware Shadow Augmentation for Remote Sensing Image Segmentation",
+    authors: "Dongho Yoon, Yechan Kim✝, JongHyun Park, Jongmin Joo, Moongu Jeon",
     venue: "Submitted to IEEE",
     year: 2026,
     type: "Preprint",
@@ -46,7 +46,7 @@ export const publications: Publication[] = [
     // imageAlt: "-",
     // ranking: "CORE A*",
     // citations: 0,
-    tags: ["Semantic Segmentation", "Change Detection", "Augmentation"],
+    tags: ["Semantic Segmentation", "Shadow-robust", "Augmentation"],
     links: [
       // { label: "Paper", href: "https://doi.org/10.1145/3767308.3834743" },
       // { label: "Code", href: "https://unique-chan.github.io/G-MAD-Project/" },
