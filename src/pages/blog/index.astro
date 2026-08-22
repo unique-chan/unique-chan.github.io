@@ -1,10 +1,17 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import PostCard from "../../components/PostCard.astro";
 import { getCollection } from "astro:content";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft))
   .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+
+const tagCounts = new Map<string, number>();
+for (const post of posts) {
+  for (const tag of post.data.tags) {
+    tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+  }
+}
+const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
 ---
 
 <BaseLayout title="Notes" description="Research notes, technical writing, and ideas in progress.">
@@ -13,17 +20,187 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft))
     <h1>Notes</h1>
     <p class="lede">Research notes, technical writing, and ideas in progress</p>
   </section>
-  <section class="page-shell post-grid blog-list">
-    {posts.map((post) => (
-      <PostCard
-        slug={post.id}
-        title={post.data.title}
-        description={post.data.description}
-        publishedAt={post.data.publishedAt}
-        tags={post.data.tags}
-        language={post.data.language}
-      />
-    ))}
-  </section>
-</BaseLayout>
 
+  <section class="page-shell notes-layout">
+    <aside class="notes-sidebar">
+      <label class="notes-search">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input type="text" placeholder="Search notes…" data-notes-search aria-label="Search notes" />
+      </label>
+
+      <nav class="notes-filters" aria-label="Filter notes by tag">
+        <button type="button" data-notes-filter="All" aria-pressed="true">
+          <span>All</span><span>{posts.length}</span>
+        </button>
+        {tags.map(([tag, count]) => (
+          <button type="button" data-notes-filter={tag} aria-pressed="false">
+            <span>{tag}</span><span>{count}</span>
+          </button>
+        ))}
+      </nav>
+    </aside>
+
+    <div class="notes-main">
+      <div class="notes-view-toggle" role="group" aria-label="Switch layout">
+        <button type="button" data-notes-view="grid" aria-pressed="true">Grid</button>
+        <button type="button" data-notes-view="list" aria-pressed="false">List</button>
+      </div>
+
+      <div class="notes-results view-grid" data-notes-results>
+        {posts.map((post) => {
+          const formattedDate = post.data.publishedAt.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric"
+          });
+          const searchText = `${post.data.title} ${post.data.description}`.toLowerCase();
+          return (
+            <article class="note-card" data-tags={post.data.tags.join(",")} data-search={searchText}>
+              <span class="note-accent" aria-hidden="true"></span>
+              <div class="note-content">
+                <time class="note-date" datetime={post.data.publishedAt.toISOString()}>{formattedDate}</time>
+                <div class="note-body">
+                  <h3><a href={`/blog/${post.id}/`}>{post.data.title}</a></h3>
+                  <p>{post.data.description}</p>
+                </div>
+                {post.data.tags[0] && <span class="note-tag">{post.data.tags[0]}</span>}
+              </div>
+            </article>
+          );
+        })}
+      </div>
+      <p class="notes-empty" hidden>No notes match your search.</p>
+      <nav class="notes-pagination" data-notes-pagination aria-label="Notes pages" hidden></nav>
+    </div>
+  </section>
+
+  <script>
+    const PAGE_SIZE_BY_VIEW: Record<string, number> = { grid: 4, list: 10 };
+
+    const searchInput = document.querySelector<HTMLInputElement>("[data-notes-search]");
+    const filterButtons = document.querySelectorAll<HTMLButtonElement>("[data-notes-filter]");
+    const viewButtons = document.querySelectorAll<HTMLButtonElement>("[data-notes-view]");
+    const results = document.querySelector<HTMLElement>("[data-notes-results]");
+    const cards = [...document.querySelectorAll<HTMLElement>(".note-card")];
+    const emptyState = document.querySelector<HTMLElement>(".notes-empty");
+    const pagination = document.querySelector<HTMLElement>("[data-notes-pagination]");
+
+    let activeTag = "All";
+    let currentPage = 1;
+
+    const goToPage = (page: number) => {
+      currentPage = page;
+      applyFilters();
+      results?.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
+    // Page numbers to show around the current page; the rest collapse into "…".
+    const pageNumbersToShow = (totalPages: number): (number | "…")[] => {
+      const pages = new Set([1, totalPages, currentPage, currentPage - 1, currentPage + 1]);
+      const sorted = [...pages].filter((page) => page >= 1 && page <= totalPages).sort((a, b) => a - b);
+      const withGaps: (number | "…")[] = [];
+      sorted.forEach((page, index) => {
+        if (index > 0 && page - (sorted[index - 1] as number) > 1) withGaps.push("…");
+        withGaps.push(page);
+      });
+      return withGaps;
+    };
+
+    const renderPagination = (totalPages: number) => {
+      if (!pagination) return;
+      pagination.innerHTML = "";
+      if (totalPages <= 1) {
+        pagination.hidden = true;
+        return;
+      }
+      pagination.hidden = false;
+
+      const prev = document.createElement("button");
+      prev.type = "button";
+      prev.className = "notes-page-nav";
+      prev.textContent = "← Prev";
+      prev.disabled = currentPage === 1;
+      prev.addEventListener("click", () => goToPage(currentPage - 1));
+      pagination.appendChild(prev);
+
+      pageNumbersToShow(totalPages).forEach((page) => {
+        if (page === "…") {
+          const ellipsis = document.createElement("span");
+          ellipsis.className = "notes-page-ellipsis";
+          ellipsis.textContent = "…";
+          pagination!.appendChild(ellipsis);
+          return;
+        }
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = String(page);
+        button.setAttribute("aria-pressed", String(page === currentPage));
+        if (page === currentPage) button.setAttribute("aria-current", "page");
+        button.addEventListener("click", () => goToPage(page));
+        pagination!.appendChild(button);
+      });
+
+      const next = document.createElement("button");
+      next.type = "button";
+      next.className = "notes-page-nav";
+      next.textContent = "Next →";
+      next.disabled = currentPage === totalPages;
+      next.addEventListener("click", () => goToPage(currentPage + 1));
+      pagination.appendChild(next);
+    };
+
+    const currentView = () => (results?.classList.contains("view-list") ? "list" : "grid");
+
+    const applyFilters = () => {
+      const pageSize = PAGE_SIZE_BY_VIEW[currentView()];
+      const query = (searchInput?.value ?? "").trim().toLowerCase();
+      const matches = cards.filter((card) => {
+        const tags = (card.dataset.tags ?? "").split(",");
+        const matchesTag = activeTag === "All" || tags.includes(activeTag);
+        const matchesSearch = query === "" || (card.dataset.search ?? "").includes(query);
+        return matchesTag && matchesSearch;
+      });
+
+      const totalPages = Math.max(1, Math.ceil(matches.length / pageSize));
+      if (currentPage > totalPages) currentPage = totalPages;
+      const start = (currentPage - 1) * pageSize;
+      const visible = new Set(matches.slice(start, start + pageSize));
+
+      cards.forEach((card) => {
+        card.hidden = !visible.has(card);
+      });
+
+      if (emptyState) emptyState.hidden = matches.length > 0;
+      renderPagination(totalPages);
+    };
+
+    searchInput?.addEventListener("input", () => {
+      currentPage = 1;
+      applyFilters();
+    });
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        activeTag = button.dataset.notesFilter ?? "All";
+        currentPage = 1;
+        filterButtons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+        applyFilters();
+      });
+    });
+
+    viewButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const view = button.dataset.notesView ?? "grid";
+        results?.classList.remove("view-grid", "view-list");
+        results?.classList.add(`view-${view}`);
+        viewButtons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+        currentPage = 1;
+        applyFilters();
+      });
+    });
+
+    applyFilters();
+  </script>
+</BaseLayout>
