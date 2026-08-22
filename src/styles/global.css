@@ -203,9 +203,51 @@ button { font: inherit; }
 
 .page-intro { padding: 7rem 0 5rem; border-bottom: 1px solid var(--line); }
 .page-intro h1 { margin: 1rem 0 2rem; }
-.research-list article { display: grid; grid-template-columns: 1fr 5fr; gap: 2rem; padding: 4rem 0; border-bottom: 1px solid var(--line); }
-.research-list h2 { font: 500 2rem/1.15 "Manrope", sans-serif; letter-spacing: -.03em; margin: 0 0 1rem; }
-.research-list p { max-width: 650px; color: var(--muted); }
+
+.research-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 3.5rem; margin-bottom: 6rem; }
+.research-card { display: flex; flex-direction: column; background: var(--bg); text-decoration: none; color: inherit; transition: transform .22s ease; }
+.research-card:hover { transform: translateY(-4px); color: inherit; }
+.research-card:hover h2 { color: var(--accent); }
+.research-motif { display: block; width: 100%; height: 168px; background: var(--surface); }
+.research-card-body { display: flex; flex-direction: column; gap: .75rem; padding: 2rem; flex: 1; }
+.research-card-body .project-index { color: var(--accent); }
+.research-card-body h2 { font: 500 1.7rem/1.15 "Manrope", sans-serif; letter-spacing: -.025em; margin: 0; transition: color .22s ease; }
+.research-card-body p { margin: 0; color: var(--muted); font-size: 1rem; line-height: 1.6; }
+
+/* 01 — scattered points settle into a cluster, then drift apart again */
+@keyframes rp-settle-1 { 0%, 100% { transform: translate(0,0); } 55% { transform: translate(248px,42px); } }
+@keyframes rp-settle-2 { 0%, 100% { transform: translate(0,0); } 55% { transform: translate(214px,-40px); } }
+@keyframes rp-settle-3 { 0%, 100% { transform: translate(0,0); } 55% { transform: translate(148px,26px); } }
+@keyframes rp-settle-4 { 0%, 100% { transform: translate(0,0); } 55% { transform: translate(112px,-44px); } }
+@keyframes rp-settle-5 { 0%, 100% { transform: translate(0,0); } 55% { transform: translate(34px,42px); } }
+@keyframes rp-settle-6 { 0%, 100% { transform: translate(0,0); } 55% { transform: translate(240px,-14px); } }
+@keyframes rp-tighten { 0%, 100% { r: 2.5; fill: var(--line); } 55% { r: 4.5; fill: var(--accent); } }
+.c1-d1, .c1-d2, .c1-d3, .c1-d4, .c1-d5, .c1-d6 { animation-duration: 4.5s; animation-timing-function: ease-in-out; animation-iteration-count: infinite; }
+.c1-d1 { animation-name: rp-settle-1, rp-tighten; }
+.c1-d2 { animation-name: rp-settle-2, rp-tighten; }
+.c1-d3 { animation-name: rp-settle-3, rp-tighten; animation-delay: .1s; }
+.c1-d4 { animation-name: rp-settle-4, rp-tighten; animation-delay: .15s; }
+.c1-d5 { animation-name: rp-settle-5, rp-tighten; animation-delay: .05s; }
+.c1-d6 { animation-name: rp-settle-6, rp-tighten; animation-delay: .2s; }
+
+/* 02 — vision / text / audio glyphs drift together into one, then apart */
+@keyframes rp-join-a { 0%, 100% { transform: translate(0,0); opacity: .85; } 55% { transform: translate(150px,26px); opacity: 1; } }
+@keyframes rp-join-b { 0%, 100% { transform: translate(0,0); opacity: .85; } 55% { transform: translate(140px,-8px); opacity: 1; } }
+@keyframes rp-join-c { 0%, 100% { transform: translate(0,0); opacity: .85; } 55% { transform: translate(120px,-34px); opacity: 1; } }
+.c2-vision { animation: rp-join-a 5s ease-in-out infinite; }
+.c2-text { animation: rp-join-b 5s ease-in-out infinite .12s; }
+.c2-audio { animation: rp-join-c 5s ease-in-out infinite .24s; }
+@keyframes rp-fuse-ring { 0%, 100% { r: 0; opacity: 0; } 45% { r: 0; opacity: 0; } 70% { r: 26; opacity: .55; } 100% { r: 34; opacity: 0; } }
+.c2-ring { animation: rp-fuse-ring 5s ease-in-out infinite; }
+
+/* 03 — perceive / reason / act loop, a dot runs the circuit */
+@keyframes rp-orbit { to { offset-distance: 100%; } }
+.c3-runner { offset-path: path('M 108,120 L 292,120 L 200,42 Z'); offset-rotate: 0deg; animation: rp-orbit 3.6s linear infinite; }
+@keyframes rp-node-tick { 0%, 100% { r: 5; } 50% { r: 7; } }
+.c3-node { animation: rp-node-tick 3.6s ease-in-out infinite; }
+.c3-node.n2 { animation-delay: 1.2s; }
+.c3-node.n3 { animation-delay: 2.4s; }
+
 .year-group { padding: 4rem 0; }
 .year-group > h2 { font: 500 2.2rem "Manrope", sans-serif; letter-spacing: -.03em; margin: 0 0 2rem; }
 .publication-filters {
@@ -217,6 +259,7 @@ button { font: inherit; }
   background: transparent; color: var(--muted); cursor: pointer;
   font: 500 .72rem/1 "DM Mono"; text-transform: uppercase; letter-spacing: .04em;
 }
+.publication-filters button::first-letter { text-decoration: underline; }
 .publication-filters button:hover { border-color: var(--ink); color: var(--ink); }
 .publication-filters button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: #fff; }
 .blog-list { margin-top: 4rem; margin-bottom: 6rem; }
@@ -294,14 +337,14 @@ button { font: inherit; }
 
 @media (max-width: 760px) {
   .page-shell, .site-header, .site-footer { width: min(calc(100% - 32px), var(--max)); }
-  .site-header { grid-template-columns: 1fr auto; min-height: 72px; }
+  .site-header { grid-template-columns: 1fr auto; min-height: 72px; padding: 0 1.25rem; }
   .site-header nav {
     grid-column: 1 / -1; grid-row: 2; overflow-x: auto;
     gap: .75rem; padding: .8rem 0; border-top: 1px solid var(--line); justify-content: space-between;
   }
   .site-header nav a { font-size: .82rem; }
   .hero { padding: 3.5rem 0 3rem; }
-  .hero-primary { grid-template-columns: 1fr; gap: 1rem; }
+  .hero-primary { grid-template-columns: 1fr; gap: 1rem; justify-items: center; text-align: center; }
   .hero h1 { font-size: clamp(2.4rem, 10.5vw, 3.1rem); margin-bottom: 2.25rem; }
   .hero-portrait { width: min(44vw, 170px); margin-bottom: 2rem; }
   .hero-bottom, .section-heading, .cv-grid, .article-layout { grid-template-columns: 1fr; gap: 2.5rem; }
@@ -309,12 +352,17 @@ button { font: inherit; }
   .hero-facts p { overflow-wrap: anywhere; }
   .section { padding: 4rem 0; }
   .section-heading { align-items: start; }
-  .project-grid, .post-grid { grid-template-columns: 1fr; }
+  .project-grid, .post-grid, .research-grid { grid-template-columns: 1fr; }
   .project-card { min-height: 270px; }
-  .publication, .research-list article { grid-template-columns: 1fr; gap: 1.5rem; }
+  .publication { grid-template-columns: 1fr; gap: 1.5rem; }
+  .publication { justify-items: center; text-align: center; }
   .publication-media { width: min(100%, 280px); }
+  .publication-tags, .text-links { justify-content: center; }
+  .publication-filters { justify-content: center; }
   .toc { display: none; }
   .cv-intro { align-items: flex-start; flex-direction: column; gap: 2rem; }
+  .cv-grid aside { align-items: center; text-align: center; }
+  .cv-interests { text-align: center; }
   .site-footer { grid-template-columns: 1fr; gap: 4rem; }
   .footer-meta { text-align: left; }
   .social-links { justify-content: flex-start; flex-wrap: wrap; }

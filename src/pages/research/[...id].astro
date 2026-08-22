@@ -1,0 +1,25 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export const getStaticPaths = (async () => {
+  const directions = await getCollection("research", ({ data }) => !data.draft);
+  return directions.map((direction) => ({ params: { id: direction.id }, props: { direction } }));
+}) satisfies GetStaticPaths;
+
+const { direction } = Astro.props;
+const { Content } = await render(direction);
+---
+
+<BaseLayout title={direction.data.title} description={direction.data.description}>
+  <article class="article page-shell">
+    <header class="article-header">
+      <a class="back-link" href="/research">← All research</a>
+      <p class="eyebrow">{direction.data.index}</p>
+      <h1>{direction.data.title}</h1>
+      <p>{direction.data.description}</p>
+    </header>
+    <div class="prose"><Content /></div>
+  </article>
+</BaseLayout>

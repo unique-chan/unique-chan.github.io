@@ -30,7 +30,7 @@ const types = ["All", ...availableTypes];
           data-all-types={type === "All" ? allTypes.join(",") : undefined}
           aria-pressed={index === 0 ? "true" : "false"}
         >
-          {type === "All" ? `All (${allTypes.join(" + ")})` : type}
+          {type === "All" ? `All (${allTypes.map((t) => t[0]).join("+")})` : type}
         </button>
       ))}
     </div>

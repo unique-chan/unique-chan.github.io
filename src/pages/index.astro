@@ -4,7 +4,6 @@ import PublicationCard from "../components/PublicationCard.astro";
 import PostCard from "../components/PostCard.astro";
 import { site } from "../config";
 import { publications } from "../data/publications";
-import { projects } from "../data/projects";
 import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
 import bioImage from "../../Bio.png";
@@ -12,6 +11,10 @@ import bioImage from "../../Bio.png";
 const posts = (await getCollection("blog", ({ data }) => !data.draft))
   .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf())
   .slice(0, 2);
+
+const directions = (await getCollection("research", ({ data }) => !data.draft)).sort((a, b) =>
+  a.data.index.localeCompare(b.data.index)
+);
 
 const featuredPublications = publications.filter((publication) => publication.featured);
 const homepagePublications =
@@ -49,12 +52,11 @@ const homepagePublications =
       <a class="arrow-link" href="/research">All research <span aria-hidden="true">→</span></a>
     </div>
     <div class="project-grid">
-      {projects.map((project) => (
+      {directions.map((direction) => (
         <article class="project-card">
-          <span class="project-index">{project.index}</span>
-          <h3>{project.title}</h3>
-          <p>{project.description}</p>
-          <div class="tag-list">{project.tags.map((tag) => <span>{tag}</span>)}</div>
+          <span class="project-index">{direction.data.index}</span>
+          <h3>{direction.data.title}</h3>
+          <p>{direction.data.description}</p>
         </article>
       ))}
     </div>
