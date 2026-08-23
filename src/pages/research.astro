@@ -2,68 +2,48 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 
-const directions = (await getCollection("research", ({ data }) => !data.draft)).sort((a, b) =>
-  a.data.index.localeCompare(b.data.index)
+const projects = (await getCollection("projects", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.startedAt.valueOf() - a.data.startedAt.valueOf()
 );
+
+const statusLabel: Record<string, string> = {
+  ongoing: "Ongoing",
+  planned: "Planned",
+  paused: "Paused",
+  completed: "Completed"
+};
 ---
 
-<BaseLayout title="Research" description="Research directions and ongoing projects.">
+<BaseLayout title="Research" description="Projects I'm currently working on.">
   <section class="page-intro page-shell">
-    <p class="eyebrow">What I work on</p>
+    <p class="eyebrow">What our team's building</p>
     <h1>Research</h1>
-    <p class="lede">for machine intelligence</p>
+    <p class="lede">projects in progress</p>
   </section>
 
-  <section class="page-shell research-grid">
-    {directions.map((direction) => (
-      <a class="research-card" href={`/research/${direction.id}`}>
-        <svg class="research-motif" viewBox="0 0 400 168" preserveAspectRatio="none" aria-hidden="true">
-          {direction.data.index === "01" && (
-            <Fragment>
-              <circle class="c1-d1" cx="40" cy="30" r="2.5" fill="var(--line)" />
-              <circle class="c1-d2" cx="66" cy="128" r="2.5" fill="var(--line)" />
-              <circle class="c1-d3" cx="140" cy="36" r="2.5" fill="var(--line)" />
-              <circle class="c1-d4" cx="188" cy="132" r="2.5" fill="var(--line)" />
-              <circle class="c1-d5" cx="252" cy="44" r="2.5" fill="var(--line)" />
-              <circle class="c1-d6" cx="56" cy="80" r="2.5" fill="var(--line)" />
-            </Fragment>
-          )}
-          {direction.data.index === "02" && (
-            <Fragment>
-              <circle class="c2-ring" cx="284" cy="84" r="0" fill="none" stroke="var(--accent)" stroke-width="1.5" />
-              <g class="c2-vision">
-                <rect x="34" y="30" width="30" height="22" rx="1" fill="none" stroke="var(--accent)" stroke-width="1.5" />
-                <circle cx="49" cy="41" r="5" fill="none" stroke="var(--accent)" stroke-width="1.5" />
-              </g>
-              <g class="c2-text">
-                <line x1="30" y1="82" x2="66" y2="82" stroke="var(--signal)" stroke-width="2" stroke-linecap="round" />
-                <line x1="30" y1="92" x2="58" y2="92" stroke="var(--signal)" stroke-width="2" stroke-linecap="round" />
-                <line x1="30" y1="102" x2="64" y2="102" stroke="var(--signal)" stroke-width="2" stroke-linecap="round" />
-              </g>
-              <g class="c2-audio">
-                <line x1="34" y1="128" x2="34" y2="146" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" />
-                <line x1="44" y1="120" x2="44" y2="154" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" />
-                <line x1="54" y1="132" x2="54" y2="142" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" />
-                <line x1="64" y1="124" x2="64" y2="150" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" />
-              </g>
-            </Fragment>
-          )}
-          {direction.data.index === "03" && (
-            <Fragment>
-              <path d="M 108,120 L 292,120 L 200,42 Z" fill="none" stroke="var(--line)" stroke-width="1.5" />
-              <circle class="c3-node n1" cx="108" cy="120" r="5" fill="var(--accent)" />
-              <circle class="c3-node n2" cx="292" cy="120" r="5" fill="var(--accent)" />
-              <circle class="c3-node n3" cx="200" cy="42" r="5" fill="var(--accent)" />
-              <circle class="c3-runner" cx="0" cy="0" r="5" fill="var(--signal)" />
-            </Fragment>
-          )}
-        </svg>
-        <div class="research-card-body">
-          <span class="project-index">{direction.data.index}</span>
-          <h2>{direction.data.title}</h2>
-          <p>{direction.data.description}</p>
-        </div>
-      </a>
-    ))}
-  </section>
+  {projects.length > 0 ? (
+    <section class="page-shell research-grid">
+      {projects.map((project) => (
+        <a class="research-card" href={`/research/${project.id}`}>
+          <div class={`research-motif status-${project.data.status}`} aria-hidden="true">
+            <span class="status-dot"></span>
+          </div>
+          <div class="research-card-body">
+            <span class="status">{statusLabel[project.data.status]}</span>
+            <h2>{project.data.title}</h2>
+            <p>{project.data.summary}</p>
+            {project.data.tags.length > 0 && (
+              <div class="tag-list">
+                {project.data.tags.map((tag) => <span>{tag.replaceAll("-", " ")}</span>)}
+              </div>
+            )}
+          </div>
+        </a>
+      ))}
+    </section>
+  ) : (
+    <section class="page-shell empty-state">
+      <p>Project write-ups are coming soon.</p>
+    </section>
+  )}
 </BaseLayout>

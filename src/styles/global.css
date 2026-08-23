@@ -135,10 +135,7 @@ button { font: inherit; }
 .arrow-link { font-size: .9rem; text-decoration: none; }
 .arrow-link span { color: var(--accent); margin-left: .35rem; }
 .project-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
-.project-card { background: var(--bg); padding: 2rem; min-height: 310px; display: flex; flex-direction: column; }
 .project-index { font-family: "DM Mono"; color: var(--accent); font-size: .75rem; }
-.project-card h3 { font: 500 1.55rem/1.2 "Manrope", sans-serif; letter-spacing: -.025em; margin: 4rem 0 1rem; }
-.project-card p { color: var(--muted); margin: 0 0 2rem; }
 .tag-list { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: auto; }
 .tag-list span, .status {
   font: 500 .66rem/1 "DM Mono"; text-transform: uppercase; letter-spacing: .05em;
@@ -296,11 +293,11 @@ button { font: inherit; }
 .research-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 3.5rem; margin-bottom: 6rem; }
 .research-card { display: flex; flex-direction: column; background: var(--bg); text-decoration: none; color: inherit; transition: transform .22s ease; }
 .research-card:hover { transform: translateY(-4px); color: inherit; }
-.research-card:hover h2 { color: var(--accent); }
-.research-motif { display: block; width: 100%; height: 168px; background: var(--surface); }
+.research-card:hover h2, .research-card:hover h3 { color: var(--accent); }
+.research-motif { display: flex; align-items: center; justify-content: center; width: 100%; height: 168px; background: var(--surface); }
 .research-card-body { display: flex; flex-direction: column; gap: .75rem; padding: 2rem; flex: 1; }
 .research-card-body .project-index { color: var(--accent); }
-.research-card-body h2 { font: 500 1.7rem/1.15 "Manrope", sans-serif; letter-spacing: -.025em; margin: 0; transition: color .22s ease; }
+.research-card-body h2, .research-card-body h3 { font: 500 1.7rem/1.15 "Manrope", sans-serif; letter-spacing: -.025em; margin: 0; transition: color .22s ease; }
 .research-card-body p { margin: 0; color: var(--muted); font-size: 1rem; line-height: 1.6; }
 
 /* 01 — scattered points settle into a cluster, then drift apart again */
@@ -336,6 +333,29 @@ button { font: inherit; }
 .c3-node { animation: rp-node-tick 3.6s ease-in-out infinite; }
 .c3-node.n2 { animation-delay: 1.2s; }
 .c3-node.n3 { animation-delay: 2.4s; }
+
+/* project status motif — one generic motion per status, independent of project identity */
+.status-dot { position: relative; width: 14px; height: 14px; border-radius: 50%; }
+.status-dot::after { content: ""; position: absolute; inset: -9px; border-radius: 50%; border: 1px solid var(--accent); }
+
+.status-ongoing .status-dot { background: var(--accent); animation: status-pulse 1.8s ease-in-out infinite; }
+.status-ongoing .status-dot::after { animation: status-ring 1.8s ease-in-out infinite; }
+@keyframes status-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.25); } }
+@keyframes status-ring { 0% { transform: scale(.5); opacity: .6; } 100% { transform: scale(2.1); opacity: 0; } }
+
+.status-planned .status-dot { background: transparent; border: 1.5px dashed var(--line); animation: status-spin 7s linear infinite; }
+.status-planned .status-dot::after { border-style: dashed; border-color: var(--line); opacity: .5; }
+@keyframes status-spin { to { transform: rotate(360deg); } }
+
+.status-paused .status-dot { background: var(--muted); opacity: .45; }
+.status-paused .status-dot::after { border-color: var(--line); opacity: .35; }
+
+.status-completed .status-dot { background: var(--ink); }
+.status-completed .status-dot::after { border-color: var(--ink); opacity: .2; }
+
+.research-card-body .status { align-self: flex-start; }
+
+.empty-state { padding: 4rem 0 8rem; color: var(--muted); }
 
 .year-group { padding: 4rem 0; }
 .year-group > h2 { font: 500 2.2rem "Manrope", sans-serif; letter-spacing: -.03em; margin: 0 0 2rem; }
@@ -452,7 +472,6 @@ button { font: inherit; }
   .notes-results.view-grid { grid-template-columns: 1fr; }
   .notes-results.view-list .note-content { grid-template-columns: minmax(0, 1fr); gap: .35rem; }
   .notes-results.view-list .note-tag { text-align: left; }
-  .project-card { min-height: 270px; }
   .publication { grid-template-columns: 1fr; gap: 1.5rem; }
   .publication { justify-items: center; text-align: center; }
   .publication-media { width: min(100%, 280px); }

@@ -24,5 +24,24 @@ const research = defineCollection({
   })
 });
 
-export const collections = { blog, research };
+const projects = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/projects" }),
+  schema: z.object({
+    title: z.string(),
+    summary: z.string(),
+    status: z.enum(["ongoing", "planned", "paused", "completed"]),
+    tags: z.array(z.enum(["representation-learning", "multimodal-understanding", "intelligent-systems"])).default([]),
+    startedAt: z.coerce.date(),
+    links: z
+      .object({
+        paper: z.string().url().optional(),
+        code: z.string().url().optional(),
+        site: z.string().url().optional()
+      })
+      .default({}),
+    draft: z.boolean().default(false)
+  })
+});
+
+export const collections = { blog, research, projects };
 

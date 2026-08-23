@@ -4,21 +4,40 @@ import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 export const getStaticPaths = (async () => {
-  const directions = await getCollection("research", ({ data }) => !data.draft);
-  return directions.map((direction) => ({ params: { id: direction.id }, props: { direction } }));
+  const projects = await getCollection("projects", ({ data }) => !data.draft);
+  return projects.map((project) => ({ params: { id: project.id }, props: { project } }));
 }) satisfies GetStaticPaths;
 
-const { direction } = Astro.props;
-const { Content } = await render(direction);
+const { project } = Astro.props;
+const { Content } = await render(project);
+
+const statusLabel: Record<string, string> = {
+  ongoing: "Ongoing",
+  planned: "Planned",
+  paused: "Paused",
+  completed: "Completed"
+};
 ---
 
-<BaseLayout title={direction.data.title} description={direction.data.description}>
+<BaseLayout title={project.data.title} description={project.data.summary}>
   <article class="article page-shell">
     <header class="article-header">
       <a class="back-link" href="/research">← All research</a>
-      <p class="eyebrow">{direction.data.index}</p>
-      <h1>{direction.data.title}</h1>
-      <p>{direction.data.description}</p>
+      <p class="eyebrow">{statusLabel[project.data.status]}</p>
+      <h1>{project.data.title}</h1>
+      <p>{project.data.summary}</p>
+      {project.data.tags.length > 0 && (
+        <div class="tag-list">
+          {project.data.tags.map((tag) => <span>{tag.replaceAll("-", " ")}</span>)}
+        </div>
+      )}
+      {(project.data.links.paper || project.data.links.code || project.data.links.site) && (
+        <div class="text-links">
+          {project.data.links.paper && <a href={project.data.links.paper}>Paper <span aria-hidden="true">↗</span></a>}
+          {project.data.links.code && <a href={project.data.links.code}>Code <span aria-hidden="true">↗</span></a>}
+          {project.data.links.site && <a href={project.data.links.site}>Site <span aria-hidden="true">↗</span></a>}
+        </div>
+      )}
     </header>
     <div class="prose"><Content /></div>
   </article>
