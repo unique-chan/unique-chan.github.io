@@ -2,6 +2,7 @@
 import type { GetStaticPaths } from "astro";
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { formatDateRange } from "../../lib/dates";
 
 export const getStaticPaths = (async () => {
   const projects = await getCollection("projects", ({ data }) => !data.draft);
@@ -23,7 +24,10 @@ const statusLabel: Record<string, string> = {
   <article class="article page-shell">
     <header class="article-header">
       <a class="back-link" href="/research">← All research</a>
-      <p class="eyebrow">{statusLabel[project.data.status]}</p>
+      <div class="card-meta">
+        <p class="eyebrow">{statusLabel[project.data.status]}</p>
+        <span class="date-range">{formatDateRange(project.data.startedAt, project.data.endedAt)}</span>
+      </div>
       <h1>{project.data.title}</h1>
       <p>{project.data.summary}</p>
       {project.data.tags.length > 0 && (

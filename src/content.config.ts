@@ -20,8 +20,11 @@ const projects = defineCollection({
     title: z.string(),
     summary: z.string(),
     status: z.enum(["ongoing", "planned", "paused", "completed"]),
-    tags: z.array(z.enum(["representation-learning", "multimodal-understanding", "intelligent-systems"])).default([]),
+    tags: z.array(z.string()).default([]),
+    institution: z.string().optional(),
     startedAt: z.coerce.date(),
+    endedAt: z.union([z.coerce.date(), z.literal("Current")]).optional(),
+    image: z.string().optional(),
     links: z
       .object({
         paper: z.string().url().optional(),

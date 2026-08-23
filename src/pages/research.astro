@@ -1,10 +1,13 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
+import { formatDateRange } from "../lib/dates";
 
-const projects = (await getCollection("projects", ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.startedAt.valueOf() - a.data.startedAt.valueOf()
-);
+const allProjects = (await getCollection("projects", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.startedAt.valueOf() - a.data.startedAt.valueOf());
+
+const ongoing = allProjects.filter((project) => project.data.status === "ongoing");
+const archive = allProjects.filter((project) => project.data.status !== "ongoing");
 
 const statusLabel: Record<string, string> = {
   ongoing: "Ongoing",
@@ -18,29 +21,77 @@ const statusLabel: Record<string, string> = {
   <section class="page-intro page-shell">
     <p class="eyebrow">What our team's building</p>
     <h1>Research</h1>
-    <p class="lede">projects in progress</p>
+    <p class="lede">What's active — and what's not.</p>
   </section>
 
-  {projects.length > 0 ? (
-    <section class="page-shell research-grid">
-      {projects.map((project) => (
-        <a class="research-card" href={`/research/${project.id}`}>
-          <div class={`research-motif status-${project.data.status}`} aria-hidden="true">
-            <span class="status-dot"></span>
+  {allProjects.length > 0 ? (
+    <Fragment>
+      {ongoing.length > 0 && (
+        <section class="page-shell" style="padding-top: 3.5rem;">
+          <div class="group-heading">
+            <h2>Ongoing</h2>
+            <span class="count">{ongoing.length}</span>
           </div>
-          <div class="research-card-body">
-            <span class="status">{statusLabel[project.data.status]}</span>
-            <h2>{project.data.title}</h2>
-            <p>{project.data.summary}</p>
-            {project.data.tags.length > 0 && (
-              <div class="tag-list">
-                {project.data.tags.map((tag) => <span>{tag.replaceAll("-", " ")}</span>)}
-              </div>
-            )}
+          <div class="research-grid">
+            {ongoing.map((project) => (
+              <a class="research-card" href={`/research/${project.id}`}>
+                <div class={`research-motif status-${project.data.status}`} aria-hidden="true">
+                  {project.data.image ? (
+                    <img src={project.data.image} alt="" />
+                  ) : (
+                    <span class="status-dot"></span>
+                  )}
+                </div>
+                <div class="research-card-body">
+                  <div class="card-meta">
+                    <span class="status">{statusLabel[project.data.status]}</span>
+                    <span class="date-range">{formatDateRange(project.data.startedAt, project.data.endedAt)}</span>
+                  </div>
+                  <h3>{project.data.title}</h3>
+                  <p>{project.data.summary}</p>
+                  {project.data.tags.length > 0 && (
+                    <div class="tag-list">
+                      {project.data.tags.map((tag) => <span>{tag.replaceAll("-", " ")}</span>)}
+                    </div>
+                  )}
+                </div>
+              </a>
+            ))}
           </div>
-        </a>
-      ))}
-    </section>
+        </section>
+      )}
+
+      {archive.length > 0 && (
+        <section class="page-shell" style="padding-top: 4.5rem; padding-bottom: 6rem;">
+          <div class="group-heading">
+            <h2>Archive</h2>
+            <span class="count">{archive.length}</span>
+          </div>
+          <div class="archive-list">
+            {archive.map((project) => (
+              <a class="archive-row" href={`/research/${project.id}`}>
+                <div class="archive-meta">
+                  <span class={`archive-status status-${project.data.status}`}>
+                    <span class="status-dot"></span>
+                    {statusLabel[project.data.status]}
+                  </span>
+                  <span class="date-range">{formatDateRange(project.data.startedAt, project.data.endedAt)}</span>
+                </div>
+                <div>
+                  <h3>{project.data.title}</h3>
+                  <p>{project.data.institution}</p>
+                </div>
+                {project.data.tags.length > 0 && (
+                  <div class="archive-tags">
+                    {project.data.tags.map((tag) => <span>{tag.replaceAll("-", " ")}</span>)}
+                  </div>
+                )}
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+    </Fragment>
   ) : (
     <section class="page-shell empty-state">
       <p>Project write-ups are coming soon.</p>
