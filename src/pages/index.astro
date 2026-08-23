@@ -12,9 +12,26 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft))
   .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf())
   .slice(0, 2);
 
-const directions = (await getCollection("research", ({ data }) => !data.draft)).sort((a, b) =>
-  a.data.index.localeCompare(b.data.index)
-);
+const directions = [
+  {
+    index: "01",
+    title: "Representation Learning",
+    description:
+      "Learn robust and transferable representations that generalize across changing environments, sensing conditions, and data distributions."
+  },
+  {
+    index: "02",
+    title: "Multimodal Understanding",
+    description:
+      "Learn to integrate visual, linguistic, and other sensory information to understand complex real-world phenomena."
+  },
+  {
+    index: "03",
+    title: "Intelligent Systems",
+    description:
+      "Develop autonomous systems that combine perception, reasoning, and decision-making to interact effectively with dynamic environments."
+  }
+];
 
 const featuredPublications = publications.filter((publication) => publication.featured);
 const homepagePublications =
@@ -55,7 +72,7 @@ const homepagePublications =
       {directions.map((direction) => (
         <a class="research-card" href="/research">
           <svg class="research-motif" viewBox="0 0 400 168" preserveAspectRatio="none" aria-hidden="true">
-            {direction.data.index === "01" && (
+            {direction.index === "01" && (
               <Fragment>
                 <circle class="c1-d1" cx="40" cy="30" r="2.5" fill="var(--line)" />
                 <circle class="c1-d2" cx="66" cy="128" r="2.5" fill="var(--line)" />
@@ -65,7 +82,7 @@ const homepagePublications =
                 <circle class="c1-d6" cx="56" cy="80" r="2.5" fill="var(--line)" />
               </Fragment>
             )}
-            {direction.data.index === "02" && (
+            {direction.index === "02" && (
               <Fragment>
                 <circle class="c2-ring" cx="284" cy="84" r="0" fill="none" stroke="var(--accent)" stroke-width="1.5" />
                 <g class="c2-vision">
@@ -85,7 +102,7 @@ const homepagePublications =
                 </g>
               </Fragment>
             )}
-            {direction.data.index === "03" && (
+            {direction.index === "03" && (
               <Fragment>
                 <path d="M 108,120 L 292,120 L 200,42 Z" fill="none" stroke="var(--line)" stroke-width="1.5" />
                 <circle class="c3-node n1" cx="108" cy="120" r="5" fill="var(--accent)" />
@@ -96,9 +113,9 @@ const homepagePublications =
             )}
           </svg>
           <div class="research-card-body">
-            <span class="project-index">{direction.data.index}</span>
-            <h3>{direction.data.title}</h3>
-            <p>{direction.data.description}</p>
+            <span class="project-index">{direction.index}</span>
+            <h3>{direction.title}</h3>
+            <p>{direction.description}</p>
           </div>
         </a>
       ))}

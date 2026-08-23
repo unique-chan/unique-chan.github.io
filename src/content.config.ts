@@ -14,16 +14,6 @@ const blog = defineCollection({
   })
 });
 
-const research = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/research" }),
-  schema: z.object({
-    index: z.string(),
-    title: z.string(),
-    description: z.string(),
-    draft: z.boolean().default(false)
-  })
-});
-
 const projects = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/projects" }),
   schema: z.object({
@@ -43,5 +33,5 @@ const projects = defineCollection({
   })
 });
 
-export const collections = { blog, research, projects };
+export const collections = { blog, projects };
 
