@@ -384,6 +384,9 @@ button { font: inherit; }
   text-transform: uppercase;
 }
 .cv-affiliation p { color: var(--ink) !important; line-height: 1.5; }
+.icon-links { display: flex; align-items: center; gap: 1rem; margin-top: .2rem; }
+.icon-links a { display: inline-flex; color: var(--ink); text-decoration: none; }
+.icon-links a:hover { color: var(--accent); }
 .cv-main section { padding: 0 0 3rem; margin-bottom: 3rem; border-bottom: 1px solid var(--line); }
 .cv-main h2 { font: 500 1.6rem "Manrope", sans-serif; letter-spacing: -.025em; margin-top: 0; }
 .cv-item { display: flex; justify-content: space-between; gap: 2rem; margin-top: 2rem; }

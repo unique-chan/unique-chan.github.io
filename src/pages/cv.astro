@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import SocialIcons from "../components/SocialIcons.astro";
 import { site } from "../config";
 ---
 
@@ -20,8 +21,7 @@ import { site } from "../config";
         <p>{site.location}</p>
       </div>
       {site.emails.map((email) => <a href={`mailto:${email}`}>{email}</a>)}
-      <a href={site.github}>GitHub</a>
-      <a href={site.scholar}>Google Scholar</a>
+      <SocialIcons />
     </aside>
     <div class="cv-main">
       <section>

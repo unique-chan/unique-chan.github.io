@@ -14,5 +14,6 @@ export const site = {
   location: "Panggyo House, South Korea",
   scholar: "https://scholar.google.com/citations?user=MfNZQDcAAAAJ",
   github: "https://github.com/unique-chan",
-  orcid: "https://orcid.org/0000-0002-2438-3590"
+  orcid: "https://orcid.org/0000-0002-2438-3590",
+  linkedin: "https://www.linkedin.com/in/yechan-kim-019b291a9"
 };
