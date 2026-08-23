@@ -70,7 +70,7 @@ const homepagePublications =
     </div>
     <div class="project-grid">
       {directions.map((direction) => (
-        <a class="research-card" href="/research">
+        <div class="research-card">
           <svg class="research-motif" viewBox="0 0 400 168" preserveAspectRatio="none" aria-hidden="true">
             {direction.index === "01" && (
               <Fragment>
@@ -117,7 +117,7 @@ const homepagePublications =
             <h3>{direction.title}</h3>
             <p>{direction.description}</p>
           </div>
-        </a>
+        </div>
       ))}
     </div>
   </section>
