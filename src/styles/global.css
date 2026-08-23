@@ -8,6 +8,7 @@
   --line: #cdc9bd;
   --accent: #3159ff;
   --signal: #d8ff44;
+  --accent-bridge: #5ab6e8;
   --max: 1180px;
 }
 
@@ -19,6 +20,7 @@
   --line: #3a3e37;
   --accent: #8199ff;
   --signal: #c8f346;
+  --accent-bridge: #7ec8ee;
 }
 
 * { box-sizing: border-box; }
@@ -86,6 +88,11 @@ button { font: inherit; }
   object-position: center 34%;
   border: 1px solid var(--line);
   border-radius: 50%;
+  transition: transform 320ms ease, box-shadow 320ms ease;
+}
+.hero-portrait img:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 14px 24px -12px rgba(0, 0, 0, .25);
 }
 .eyebrow {
   font-family: "DM Mono", monospace; text-transform: uppercase;
@@ -95,7 +102,25 @@ button { font: inherit; }
   font-family: "Manrope", sans-serif; font-weight: 500; line-height: .98; letter-spacing: -.055em;
   font-size: clamp(2.8rem, 5vw, 4.8rem); margin: 1rem 0 2.5rem;
 }
-.hero h1 em { color: var(--accent); font-style: normal; font-weight: 500; }
+.hero h1 em {
+  font-style: normal;
+  font-weight: 500;
+  background: linear-gradient(
+    135deg,
+    var(--accent),
+    var(--accent-bridge),
+    var(--accent)
+  );
+  background-size: 200% auto;
+  background-position: 0% center;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: hero-gradient-scroll 7s linear infinite;
+}
+@keyframes hero-gradient-scroll {
+  to { background-position: -200% center; }
+}
 .hero-bottom { display: grid; grid-template-columns: 1.3fr .7fr; gap: 5rem; align-items: end; }
 .hero-bottom > * { min-width: 0; }
 .hero-intro, .lede { font-size: clamp(1.05rem, 1.45vw, 1.22rem); max-width: 720px; line-height: 1.6; margin: 0; }
@@ -195,11 +220,11 @@ button { font: inherit; }
   text-transform: uppercase;
 }
 .post-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
-.post-card { background: var(--bg); padding: 2rem; min-height: 300px; display: flex; flex-direction: column; }
+.post-card { background: var(--bg); padding: 1.75rem; min-height: 190px; display: flex; flex-direction: column; }
 .post-meta { display: flex; gap: 1rem; color: var(--muted); font: .7rem "DM Mono"; text-transform: uppercase; }
-.post-card h3 { font: 500 1.55rem/1.22 "Manrope", sans-serif; letter-spacing: -.025em; margin: 3rem 0 1rem; }
+.post-card h3 { font: 500 1.3rem/1.22 "Manrope", sans-serif; letter-spacing: -.025em; margin: 1.25rem 0 .75rem; }
 .post-card h3 a { text-decoration: none; }
-.post-card p { color: var(--muted); margin: 0 0 2rem; }
+.post-card p { color: var(--muted); margin: 0 0 1.25rem; }
 
 .page-intro { padding: 7rem 0 5rem; border-bottom: 1px solid var(--line); }
 .page-intro h1 { margin: 1rem 0 2rem; }
