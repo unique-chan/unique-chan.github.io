@@ -414,7 +414,7 @@ button { font: inherit; }
 .toc a { color: var(--muted); text-decoration: none; font-size: .82rem; }
 
 .cv-intro { display: flex; align-items: end; justify-content: space-between; }
-.cv-intro h1 { font-size: clamp(3rem, 6vw, 5rem); margin-bottom: 1rem; }
+.cv-intro h1 { font-size: clamp(3rem, 6vw, 5rem); }
 .print-button { border: 1px solid var(--ink); background: var(--ink); color: var(--bg); padding: .8rem 1.2rem; cursor: pointer; }
 .cv-grid { display: grid; grid-template-columns: 1fr 3fr; gap: 5rem; padding: 5rem 0 8rem; }
 .cv-grid aside { display: flex; flex-direction: column; align-items: flex-start; gap: .6rem; font-size: .9rem; }
