@@ -1,0 +1,42 @@
+---
+import type { Patent } from "../data/patents";
+import { site } from "../config";
+
+interface Props {
+  patent: Patent;
+}
+
+const { patent } = Astro.props;
+const inventorSegments = patent.inventors.split(new RegExp(`(${site.fullName}|${site.koreanName})`));
+---
+
+<article class="publication" data-publication-type="Patent" data-patent-status={patent.status}>
+  <div class="publication-media">
+    <div class="publication-placeholder" role="img" aria-label={`Patent filing graphic for ${patent.title}`}>
+      <span>Patent</span>
+      <strong aria-hidden="true">P/</strong>
+    </div>
+  </div>
+  <div>
+    <div class="publication-tags">
+      <span class="publication-type">Patent</span>
+      <span class="status">{patent.status}</span>
+      <span class="status">{patent.country}</span>
+    </div>
+    <h3>{patent.title}</h3>
+    <p class="authors">
+      {inventorSegments.map((segment) =>
+        segment === site.fullName || segment === site.koreanName ? (
+          <strong>{segment}</strong>
+        ) : (
+          segment
+        )
+      )}
+    </p>
+    <p class="venue">
+      {patent.registrationNumber
+        ? `Reg. No. ${patent.registrationNumber} · Filed ${patent.filingDate}`
+        : `No. ${patent.filingNumber} · Filed ${patent.filingDate}`}
+    </p>
+  </div>
+</article>

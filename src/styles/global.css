@@ -412,7 +412,7 @@ button { font: inherit; }
 .publication-filters button:hover { border-color: var(--ink); color: var(--ink); }
 .publication-filters button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: #fff; }
 
-.publication-korean-group { display: flex; flex-direction: column; align-items: flex-start; gap: .55rem; }
+.publication-filter-group { display: flex; flex-direction: column; align-items: flex-start; gap: .55rem; }
 .publication-subfilters {
   display: flex; flex-wrap: wrap; gap: .5rem;
   margin-left: .6rem; padding-left: .8rem;
