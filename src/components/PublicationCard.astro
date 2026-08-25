@@ -7,7 +7,7 @@ interface Props {
 }
 
 const { publication: pub } = Astro.props;
-const authorSegments = pub.authors.split(site.fullName);
+const authorSegments = pub.authors.split(new RegExp(`(${site.fullName}|${site.koreanName})`));
 ---
 
 <article class:list={["publication", { featured: pub.featured }]} data-publication-type={pub.type}>
@@ -44,12 +44,13 @@ const authorSegments = pub.authors.split(site.fullName);
     </div>
     <h3>{pub.title}</h3>
     <p class="authors">
-      {authorSegments.map((segment, index) => (
-        <Fragment>
-          {index > 0 && <strong>{site.fullName}</strong>}
-          {segment}
-        </Fragment>
-      ))}
+      {authorSegments.map((segment) =>
+        segment === site.fullName || segment === site.koreanName ? (
+          <strong>{segment}</strong>
+        ) : (
+          segment
+        )
+      )}
     </p>
     <p class="venue">{pub.venue}</p>
     <div class="text-links">

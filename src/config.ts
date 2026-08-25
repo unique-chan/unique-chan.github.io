@@ -1,6 +1,7 @@
 export const site = {
   name: "Yechan Kim",
   fullName: "Yechan Kim",
+  koreanName: "김예찬",
   role: "Researcher",
   institution: "LIG Defense&Aerospace, AI Laboratory",
   emails: [

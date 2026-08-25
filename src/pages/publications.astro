@@ -3,16 +3,29 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import PublicationCard from "../components/PublicationCard.astro";
 import { publications } from "../data/publications";
 
-const publicationTypeOrder = ["Conference", "Journal", "Preprint", "Workshop"] as const;
+const publicationTypeOrder = [
+  "Conference",
+  "Journal",
+  "Preprint",
+  "Workshop",
+  "Korean Conference",
+  "Korean Journal"
+] as const;
 const availableTypes = publicationTypeOrder.filter((type) =>
   publications.some((publication) => publication.type === type)
 );
 const allTypes = availableTypes.filter((type) => type === "Conference" || type === "Journal");
+const koreanTypes = availableTypes.filter(
+  (type) => type === "Korean Journal" || type === "Korean Conference"
+);
+const primaryTypes = availableTypes.filter(
+  (type) => type !== "Korean Journal" && type !== "Korean Conference"
+);
 const visiblePublications = publications;
 const years = [...new Set(visiblePublications.map((publication) => publication.year))].sort(
   (a, b) => b - a
 );
-const types = ["All", ...availableTypes];
+const types = ["All", ...primaryTypes, ...(koreanTypes.length ? ["Korean"] : [])];
 ---
 
 <BaseLayout title="Publications" description="Peer-reviewed papers, preprints, and research artifacts.">
@@ -23,16 +36,38 @@ const types = ["All", ...availableTypes];
   </section>
   <section class="page-shell">
     <div class="publication-filters" aria-label="Filter publications by type">
-      {types.map((type, index) => (
-        <button
-          type="button"
-          data-publication-filter={type}
-          data-all-types={type === "All" ? allTypes.join(",") : undefined}
-          aria-pressed={index === 0 ? "true" : "false"}
-        >
-          {type === "All" ? `All (${allTypes.map((t) => t[0]).join("+")})` : type}
-        </button>
-      ))}
+      {types.map((type, index) =>
+        type === "Korean" ? (
+          <div class="publication-korean-group">
+            <button
+              type="button"
+              class="filter-top"
+              data-publication-filter="Korean"
+              data-all-types={koreanTypes.join(",")}
+              aria-pressed="false"
+            >
+              Korean Papers
+            </button>
+            <div class="publication-subfilters" data-korean-subfilters aria-label="Filter Korean publications by type" hidden>
+              {koreanTypes.map((koreanType) => (
+                <button type="button" data-publication-filter={koreanType} aria-pressed="false">
+                  {koreanType.replace("Korean ", "")}
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <button
+            type="button"
+            class="filter-top"
+            data-publication-filter={type}
+            data-all-types={type === "All" ? allTypes.join(",") : undefined}
+            aria-pressed={index === 0 ? "true" : "false"}
+          >
+            {type === "All" ? `All (${allTypes.map((t) => t[0]).join("+")})` : type}
+          </button>
+        )
+      )}
     </div>
     {years.map((year) => (
       <div class="year-group" data-year-group>
@@ -48,33 +83,53 @@ const types = ["All", ...availableTypes];
     ))}
   </section>
   <script>
-    const filterButtons = document.querySelectorAll<HTMLButtonElement>("[data-publication-filter]");
+    const topFilterButtons = document.querySelectorAll<HTMLButtonElement>(".filter-top");
+    const subFilterContainer = document.querySelector<HTMLElement>("[data-korean-subfilters]");
+    const subFilterButtons = document.querySelectorAll<HTMLButtonElement>("[data-korean-subfilters] [data-publication-filter]");
     const publicationCards = document.querySelectorAll<HTMLElement>("[data-publication-type]");
     const yearGroups = document.querySelectorAll<HTMLElement>("[data-year-group]");
 
-    filterButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const selectedType = button.dataset.publicationFilter ?? "All";
+    const applyFilter = (button: HTMLButtonElement) => {
+      const selectedType = button.dataset.publicationFilter ?? "All";
+      const visibleTypes = button.dataset.allTypes
+        ? button.dataset.allTypes.split(",")
+        : [selectedType];
 
-        filterButtons.forEach((item) => {
+      publicationCards.forEach((card) => {
+        card.hidden = !visibleTypes.includes(card.dataset.publicationType ?? "");
+      });
+
+      yearGroups.forEach((group) => {
+        const visibleCards = group.querySelectorAll<HTMLElement>("[data-publication-type]:not([hidden])");
+        group.hidden = visibleCards.length === 0;
+      });
+    };
+
+    topFilterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        topFilterButtons.forEach((item) => {
           item.setAttribute("aria-pressed", String(item === button));
         });
 
-        publicationCards.forEach((card) => {
-          const visibleTypes =
-            selectedType === "All"
-              ? (button.dataset.allTypes ?? "").split(",")
-              : [selectedType];
-          card.hidden = !visibleTypes.includes(card.dataset.publicationType ?? "");
-        });
+        const isKorean = button.dataset.publicationFilter === "Korean";
+        if (subFilterContainer) {
+          subFilterContainer.hidden = !isKorean;
+          subFilterButtons.forEach((item) => item.setAttribute("aria-pressed", "false"));
+        }
 
-        yearGroups.forEach((group) => {
-          const visibleCards = group.querySelectorAll<HTMLElement>("[data-publication-type]:not([hidden])");
-          group.hidden = visibleCards.length === 0;
-        });
+        applyFilter(button);
       });
     });
 
-    filterButtons[0]?.click();
+    subFilterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        subFilterButtons.forEach((item) => {
+          item.setAttribute("aria-pressed", String(item === button));
+        });
+        applyFilter(button);
+      });
+    });
+
+    topFilterButtons[0]?.click();
   </script>
 </BaseLayout>
