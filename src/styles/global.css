@@ -96,8 +96,34 @@ button { font: inherit; }
 .theme-toggle:hover { background: var(--signal); color: #111; border-color: var(--signal); }
 .theme-toggle svg { width: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; }
 
-.hero { margin: clamp(.5rem, 1.2vw, 1rem) auto clamp(2rem, 3.5vw, 3rem);
-  padding: clamp(2.5rem, 4.5vw, 3.5rem) clamp(1.75rem, 3vw, 2.5rem); }
+.hero {
+  margin: clamp(.5rem, 1.2vw, 1rem) auto clamp(2rem, 3.5vw, 3rem);
+  padding: 0 clamp(1.75rem, 3vw, 2.5rem) clamp(2.5rem, 4.5vw, 3.5rem);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+/* window chrome — traffic lights in a title bar flush to the box edges */
+.mac-bar {
+  display: flex;
+  align-items: center;
+  height: 38px;
+  margin: 0 calc(-1 * clamp(1.75rem, 3vw, 2.5rem)) clamp(1.75rem, 3vw, 2.25rem);
+  padding: 0 14px;
+  background: color-mix(in srgb, var(--ink) 5%, transparent);
+  border-bottom: 1px solid var(--hero-edge);
+}
+.mac-lights { display: flex; gap: 8px; }
+.mac-lights i {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 .5px rgba(0, 0, 0, .12);
+}
+.mac-lights i:nth-child(1) { background: #ff5f57; }
+.mac-lights i:nth-child(2) { background: #febc2e; }
+.mac-lights i:nth-child(3) { background: #28c840; }
 
 /* Hero sits in a soft box: content width, fill only, no rule. The header's
    bottom border and the next section's top rule would crowd it otherwise. */
@@ -172,7 +198,7 @@ button { font: inherit; }
 
 .section { padding: 6rem 0; border-top: 1px solid var(--line); }
 .hero + .section { border-top: none; padding-top: 3rem; }
-.section-heading { display: grid; grid-template-columns: 1fr 2fr auto; align-items: end; margin-bottom: 3rem; }
+.section-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 1.5rem; margin-bottom: 3rem; }
 .section-heading .eyebrow { color: var(--muted); margin: 0; }
 .section-heading h2 { font-family: "Manrope", sans-serif; font-weight: 500; font-size: clamp(2rem, 3.5vw, 3.2rem); line-height: 1.05; letter-spacing: -.04em; margin: 0; }
 .arrow-link { font-size: .9rem; text-decoration: none; }
@@ -575,7 +601,8 @@ button { font: inherit; }
     gap: .75rem; padding: .8rem 0; border-top: 1px solid var(--line); justify-content: space-between;
   }
   .site-header nav a { font-size: .82rem; }
-  .hero { margin: .5rem auto 1.5rem; padding: 2.25rem 1.25rem; }
+  .hero { margin: .5rem auto 1.5rem; padding: 0 1.25rem 2.25rem; }
+  .mac-bar { margin-inline: -1.25rem; margin-bottom: 1.5rem; }
   .hero-primary { grid-template-columns: 1fr; gap: 1rem; justify-items: center; text-align: center; }
   .hero h1 { font-size: clamp(2.1rem, 9vw, 2.7rem); margin-bottom: 2rem; }
   .hero-portrait { width: min(38vw, 144px); margin-bottom: 2rem; }
@@ -610,7 +637,7 @@ button { font: inherit; }
 
 @media print {
   .site-header, .site-footer, .print-button { display: none; }
-  .hero::before { display: none; }
+  .hero::before, .mac-bar { display: none; }
   :root { --bg: #fff; --ink: #000; --muted: #444; }
   body { background-image: none; }
   .page-intro { padding: 1rem 0 2rem; }
