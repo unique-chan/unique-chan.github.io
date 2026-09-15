@@ -24,6 +24,8 @@
   /* hero fill is translucent so the graph paper carries through the box */
   --hero-fill: rgba(222, 216, 200, .55);
   --hero-edge: rgba(23, 26, 24, .07);
+  --hero-cast: 0 6px 16px -14px rgba(23, 26, 24, .5);
+  --hero-cast-hover: 0 20px 40px -24px rgba(23, 26, 24, .45), 0 3px 10px -6px rgba(23, 26, 24, .18);
 }
 
 :root[data-theme="dark"] {
@@ -41,6 +43,8 @@
 
   --hero-fill: rgba(44, 49, 40, .5);
   --hero-edge: rgba(242, 241, 233, .08);
+  --hero-cast: 0 6px 16px -14px rgba(0, 0, 0, .8);
+  --hero-cast-hover: 0 22px 44px -24px rgba(0, 0, 0, .75), 0 3px 10px -6px rgba(0, 0, 0, .5);
 }
 
 * { box-sizing: border-box; }
@@ -101,7 +105,9 @@ button { font: inherit; }
   padding: 0 clamp(1.75rem, 3vw, 2.5rem) clamp(2.5rem, 4.5vw, 3.5rem);
   border-radius: var(--r-lg);
   overflow: hidden;
+  transition: transform 320ms cubic-bezier(.22, .61, .36, 1);
 }
+.hero:hover { transform: translateY(-3px); }
 
 /* window chrome — traffic lights in a title bar flush to the box edges */
 .mac-bar {
@@ -112,7 +118,9 @@ button { font: inherit; }
   padding: 0 14px;
   background: color-mix(in srgb, var(--ink) 5%, transparent);
   border-bottom: 1px solid var(--hero-edge);
+  transition: background 320ms ease;
 }
+.hero:hover .mac-bar { background: color-mix(in srgb, var(--ink) 8%, transparent); }
 .mac-lights { display: flex; gap: 8px; }
 .mac-lights i {
   display: block;
@@ -124,6 +132,20 @@ button { font: inherit; }
 .mac-lights i:nth-child(1) { background: #ff5f57; }
 .mac-lights i:nth-child(2) { background: #febc2e; }
 .mac-lights i:nth-child(3) { background: #28c840; }
+.mac-lights i { position: relative; }
+.mac-lights i::after {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font: 700 10px/1 "DM Mono", monospace;
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+.hero:hover .mac-lights i::after { opacity: 1; }
+.mac-lights i:nth-child(1)::after { content: "×"; color: #7d0a02; }
+.mac-lights i:nth-child(2)::after { content: "−"; color: #915b00; }
+.mac-lights i:nth-child(3)::after { content: "+"; color: #0a6300; }
 
 /* Hero sits in a soft box: content width, fill only, no rule. The header's
    bottom border and the next section's top rule would crowd it otherwise. */
@@ -136,7 +158,10 @@ button { font: inherit; }
   border: 1px solid var(--hero-edge);
   border-radius: var(--r-lg);
   background: var(--hero-fill);
+  box-shadow: var(--hero-cast);
+  transition: box-shadow 320ms cubic-bezier(.22, .61, .36, 1);
 }
+.hero:hover::before { box-shadow: var(--hero-cast-hover); }
 .hero-primary {
   display: grid;
   grid-template-columns: 180px minmax(0, 1fr);
