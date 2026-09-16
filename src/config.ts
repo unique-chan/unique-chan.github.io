@@ -2,7 +2,7 @@ export const site = {
   name: "Yechan Kim",
   fullName: "Yechan Kim",
   koreanName: "김예찬",
-  role: "Researcher",
+  role: "Research Engineer",
   institution: "LIG Defense&Aerospace, AI Laboratory",
   emails: [
     "yechan.kim26@ligdna.com",
@@ -11,7 +11,7 @@ export const site = {
     // "another.email@example.com",
   ],
   description:
-    "Researcher at LIG Defense&Aerospace AI Laboratory, studying how machines learn to see and act.",
+    "Research Engineer at LIG Defense&Aerospace - AI Laboratory, studying how machines learn to see and act.",
   location: "Pangyo House, Republic of Korea",
   scholar: "https://scholar.google.com/citations?user=MfNZQDcAAAAJ",
   github: "https://github.com/unique-chan",
