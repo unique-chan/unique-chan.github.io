@@ -29,7 +29,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL} />
-    <title>{title === site.fullName ? title : `${title} — ${site.fullName}`}</title>
+    <title>{title === site.fullName ? title : `${title}: ${site.fullName}`}</title>
     <script is:inline>
       const savedTheme = localStorage.getItem("theme");
       const preferredDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
