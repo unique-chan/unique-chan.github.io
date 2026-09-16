@@ -11,7 +11,7 @@ export const site = {
     // "another.email@example.com",
   ],
   description:
-    " ",
+    "Researcher at LIG Defense&Aerospace AI Laboratory, studying how machines learn to see and act.",
   location: "Pangyo House, Republic of Korea",
   scholar: "https://scholar.google.com/citations?user=MfNZQDcAAAAJ",
   github: "https://github.com/unique-chan",
