@@ -13,6 +13,17 @@ export type Patent = {
 // Source: https://sites.google.com/view/mlv/publications/patent-software
 export const patents: Patent[] = [
   {
+    title: "장면 맥락 기반 실시간 그림자 합성을 이용한 원격탐사 영상 분할 모델 학습 방법 (가제, LIG)",
+    inventors: "김예찬, 정남훈",
+    country: "KOR",
+    filingNumber: "#",
+    filingDate: "#",
+    year: 2026,
+    status: "Filed",
+    links: []
+  },
+
+  {
     title: "경계 상자 보정 장치 및 방법",
     inventors: "김예찬, 주종민, 김수연, 전문구, 김지아, 이송재, 박상아, 박정호, 강선종",
     country: "KOR",
