@@ -762,11 +762,37 @@ button { font: inherit; }
 .gen-intro { display: flex; align-items: flex-end; justify-content: space-between; gap: clamp(1.5rem, 4vw, 3rem); }
 .gen-intro > div { min-width: 0; }
 .tree-mark { display: block; flex: none; color: var(--muted); }
-.tree-mark-crown { fill: var(--accent); }
 .gen-intro-mark { color: var(--ink); margin-bottom: .35rem; }
 .gen-card-mark { color: var(--bg); opacity: .85; margin: .15rem 0; }
-.gen-card-mark .tree-mark-crown { fill: var(--signal); }
 
+/* pixel christmas tree: bricks drop in row by row, then light rains down the tree */
+.tree-mark rect {
+  --base: currentColor; --glow: currentColor; --flash: currentColor;
+  fill: var(--base);
+  transform-box: fill-box;
+  animation:
+    tree-drop .55s cubic-bezier(.3, 1.5, .55, 1) calc(var(--r) * .045s + var(--j)) both,
+    tree-rain 2.6s steps(1, end) calc(.9s + var(--r) * .11s + var(--j)) infinite;
+}
+.tree-mark .tree-mark-crown { --base: var(--leaf-4); --glow: var(--signal); --flash: var(--signal); }
+.tree-mark .tree-needle.is-deep { --base: var(--leaf-3); }
+.tree-mark .tree-needle.is-fresh { --base: var(--leaf-1); }
+.tree-mark .tree-needle { --glow: var(--leaf-2); --flash: var(--signal); }
+.tree-mark .tree-bauble { --glow: var(--signal); --flash: var(--signal); }
+.tree-mark .tree-bauble.is-blue { --base: var(--accent); }
+.tree-mark .tree-bauble.is-gold { --base: var(--leaf-4); }
+.tree-mark .tree-bauble.is-red { --base: #d9453a; }
+:root[data-theme="dark"] .tree-mark .tree-bauble.is-red { --base: #ff6f61; }
+
+@keyframes tree-drop {
+  from { transform: translateY(-260%); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+@keyframes tree-rain {
+  0% { fill: var(--flash); }
+  7% { fill: var(--glow); }
+  15%, 100% { fill: var(--base); }
+}
 /* outbound name links */
 .gen-card h3 a { text-decoration: none; display: inline; }
 .gen-card h3 a:hover { color: var(--accent); }

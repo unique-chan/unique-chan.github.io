@@ -4,36 +4,54 @@ interface Props {
   class?: string;
 }
 const { size = 120, class: className = "" } = Astro.props;
+
+// 12×12 brick grid: [row, firstCol, lastCol] for each run of bricks
+const star = [[0, 5, 6]];
+const needles = [
+  [1, 5, 6], [2, 4, 7], [3, 3, 8],            // top tier
+  [4, 4, 7], [5, 2, 9], [6, 1, 10],           // middle tier
+  [7, 3, 8], [8, 1, 10], [9, 0, 11],          // bottom tier
+];
+const wood = [[10, 5, 6], [11, 4, 7]];        // trunk and stand
+// needle bricks that are baubles instead
+const baubles = new Set(["6,2", "4,4", "8,5", "2,6", "6,6", "4,7", "3,8", "9,8", "1,9", "6,9"]);
+
+const pick = <T,>(xs: T[]) => xs[Math.floor(Math.random() * xs.length)];
+const expand = (runs: number[][]) =>
+  runs.flatMap(([row, from, to]) =>
+    Array.from({ length: to - from + 1 }, (_, i) => ({ col: from + i, row })),
+  );
+const needleClass = (col: number, row: number) =>
+  baubles.has(`${col},${row}`)
+    ? `tree-bauble ${pick(["is-blue", "is-gold", "is-red"])}`
+    : `tree-needle ${pick(["is-deep", "is-deep", "is-fresh"])}`;
+
+const bricks = [
+  ...expand(star).map((b) => ({ ...b, cls: "tree-mark-crown" })),
+  ...expand(needles).map((b) => ({ ...b, cls: needleClass(b.col, b.row) })),
+  ...expand(wood).map((b) => ({ ...b, cls: "tree-wood" })),
+];
+// row drives the top-to-bottom cascade; jitter keeps each brick a touch off-beat
+const timing = (row: number) => `--r:${row};--j:${(Math.random() * 0.18).toFixed(2)}s`;
 ---
 
 <svg
   class={`tree-mark ${className}`}
   width={size}
   height={size}
-  viewBox="0 0 64 64"
+  viewBox="0 0 48 48"
   role="img"
   aria-label="Academic family tree"
 >
-  <g
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2.6"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  >
-    <!-- trunk, and the central leader that carries on through the canopy -->
-    <path d="M32 61V18" />
-    <!-- first branching -->
-    <path d="M14 40h36M14 40v-8M50 40v-8" />
-    <!-- second branching, left and right -->
-    <path d="M7 32h14M7 32v-6M21 32v-10" />
-    <path d="M43 32h14M57 32v-6M43 32v-10" />
-  </g>
-  <g fill="none" stroke="currentColor" stroke-width="2.6">
-    <circle cx="7" cy="22" r="3.5" />
-    <circle cx="21" cy="18" r="3.5" />
-    <circle cx="43" cy="18" r="3.5" />
-    <circle cx="57" cy="22" r="3.5" />
-  </g>
-  <circle class="tree-mark-crown" cx="32" cy="13" r="5" />
+  {bricks.map((b) => (
+    <rect
+      class={b.cls}
+      style={timing(b.row)}
+      x={b.col * 4 + 0.35}
+      y={b.row * 4 + 0.35}
+      width="3.3"
+      height="3.3"
+      rx="0.5"
+    />
+  ))}
 </svg>
