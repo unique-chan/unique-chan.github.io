@@ -123,7 +123,8 @@ button { font: inherit; }
 
 /* window chrome — traffic lights in a title bar flush to the box edges */
 .mac-bar {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   height: 38px;
   margin: 0 calc(-1 * clamp(1.75rem, 3vw, 2.5rem)) clamp(1.75rem, 3vw, 2.25rem);
@@ -198,6 +199,50 @@ button { font: inherit; }
   transform: translateY(-8px);
   box-shadow: 0 14px 24px -12px rgba(0, 0, 0, .25);
 }
+/* Handwritten "hello" — signed into the empty bottom-left of the hero card,
+   opposite the affiliation facts, so it fills space the layout already had
+   instead of adding a block of its own. The pencil rides the same path the
+   ink is drawn along. */
+.hello-write { --hello-cycle: 9s; width: clamp(62px, 6.5vw, 84px); }
+.hello-write svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+.hello-ink {
+  fill: none; stroke: var(--ink);
+  stroke-width: 11; stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: var(--len);
+  stroke-dashoffset: 0; /* no script: the finished word, no animation */
+}
+.hello-write.is-armed .hello-ink { stroke-dashoffset: var(--len); }
+.hello-write.is-writing .hello-ink {
+  animation: hello-draw var(--hello-cycle) cubic-bezier(.45, .05, .35, 1) infinite;
+}
+
+.hello-pen { offset-rotate: 0deg; offset-anchor: 0 0; offset-distance: 0%; opacity: 0; }
+.hello-write.is-writing .hello-pen {
+  opacity: 1;
+  animation: hello-pen-move var(--hello-cycle) cubic-bezier(.45, .05, .35, 1) infinite;
+}
+
+/* One loop: write, hold the finished word, then walk the nib back to the
+   start. Raising stroke-dashoffset retracts the line from its end, so the
+   return trip un-writes exactly what the pencil passes over — same keyframe
+   times and easing on both, and they never drift apart. */
+@keyframes hello-draw {
+  0% { stroke-dashoffset: var(--len); }
+  30%, 70% { stroke-dashoffset: 0; }
+  96%, 100% { stroke-dashoffset: var(--len); }
+}
+@keyframes hello-pen-move {
+  0% { offset-distance: 0%; }
+  30%, 70% { offset-distance: 100%; }
+  96%, 100% { offset-distance: 0%; }
+}
+
+/* no motion-path support: skip the pencil, keep the handwriting */
+@supports not (offset-path: path("M0 0")) { .hello-pen { display: none; } }
+/* reduced motion slows the hand down rather than taking the pencil away */
+@media (prefers-reduced-motion: reduce) { .hello-write { --hello-cycle: 16s; } }
+
 .eyebrow {
   font-family: "DM Mono", monospace; text-transform: uppercase;
   font-size: .72rem; letter-spacing: .12em; font-weight: 500;
@@ -642,6 +687,7 @@ button { font: inherit; }
   .hero-primary { grid-template-columns: 1fr; gap: 1rem; justify-items: center; text-align: center; }
   .hero h1 { font-size: clamp(2.1rem, 9vw, 2.7rem); margin-bottom: 2rem; }
   .hero-portrait { width: min(38vw, 144px); margin-bottom: 2rem; }
+  .hello-write { width: min(19vw, 68px); }
   .hero-bottom, .section-heading, .cv-grid, .article-layout { grid-template-columns: 1fr; gap: 2.5rem; }
   .hero-facts { grid-column: auto; grid-template-columns: 1fr; margin-top: .5rem; gap: .6rem; }
   .hero-facts p { justify-content: center; }

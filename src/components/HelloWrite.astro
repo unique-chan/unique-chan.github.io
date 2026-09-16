@@ -1,0 +1,55 @@
+---
+/* A cursive "hello" drawn by a pencil that rides the very same path, so the
+   nib and the ink head stay locked together: stroke-dashoffset and
+   offset-distance are both arc-length parameterised, so sharing a duration
+   and easing curve is all the synchronisation they need.
+
+   Graphite, not a gradient — the hero headline already runs a colour ramp,
+   and a pencil that writes in rainbow makes no sense anyway.
+
+   The viewBox is cropped close to the glyph so the signature costs the hero
+   as little height as possible; the pencil simply overflows it. */
+const HELLO_PATH = "M34 150 C36 110 50 58 70 32 C82 18 98 26 92 50 C86 74 74 112 72 150 C72 114 86 94 106 94 C126 94 134 116 132 136 C131 146 134 150 140 150 C152 150 172 146 184 130 C196 112 188 92 174 98 C160 104 156 132 166 144 C176 154 200 150 214 138 C228 126 246 90 256 58 C264 32 254 20 242 34 C230 48 232 116 238 140 C241 149 248 153 256 150 C270 146 288 110 298 78 C306 52 296 40 284 54 C272 68 274 122 280 142 C283 150 290 153 298 150 C320 148 342 134 352 114 C361 96 350 80 335 88 C319 97 317 133 331 145 C345 155 366 145 368 122 C369 110 364 101 357 101 C368 97 381 100 389 108";
+const LENGTH = 1418; // getTotalLength() of the path above
+---
+
+<div class="hello-write">
+  <svg viewBox="0 -26 448 198" role="img" aria-label="hello">
+    <path class="hello-ink" d={HELLO_PATH} style={`--len:${LENGTH}`} />
+    <g class="hello-pen" style={`offset-path:path("${HELLO_PATH}")`} aria-hidden="true">
+      <g transform="scale(.62)">
+        <path d="M0 0 9 -5 5 -9Z" fill="var(--ink)" />
+        <path d="M5 -9 9 -5 21 -17 17 -21Z" fill="#d7b98a" />
+        <path d="M17 -21 21 -17 52 -48 48 -52Z" fill="var(--accent)" />
+        <path d="M48 -52 52 -48 60 -56 56 -60Z" fill="#b9bcc4" />
+        <path d="M56 -60 60 -56 68 -64 64 -68Z" fill="var(--signal)" />
+      </g>
+    </g>
+  </svg>
+</div>
+
+<script>
+  const box = document.querySelector<HTMLElement>(".hello-write");
+
+  if (box) {
+    // Armed = wound back to a blank line. Doing this from script means a
+    // reader without JS still gets the finished word instead of nothing.
+    box.classList.add("is-armed");
+
+    if ("IntersectionObserver" in window) {
+      // Toggling rather than disconnecting keeps the loop off the clock while
+      // the hero is scrolled away, and restarts the hand on the way back.
+      const watcher = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            box.classList.toggle("is-writing", entry.isIntersecting);
+          }
+        },
+        { threshold: 0.4 }
+      );
+      watcher.observe(box);
+    } else {
+      box.classList.add("is-writing");
+    }
+  }
+</script>

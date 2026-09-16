@@ -240,7 +240,7 @@ export const genealogy: GenRow[] = [
         institution: "University of Minnesota–Minneapolis",
         year: "2001",
         // note: "Professor of GIST, Dept. of Electrical Engineering and Computer Sciences",
-        key: true
+        key: false
       }
     ]
   },

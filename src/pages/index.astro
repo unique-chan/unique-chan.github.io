@@ -6,6 +6,7 @@ import { site } from "../config";
 import { publications } from "../data/publications";
 import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
+import HelloWrite from "../components/HelloWrite.astro";
 import bioImage from "../../Bio.png";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft))
@@ -40,8 +41,9 @@ const homepagePublications =
 
 <BaseLayout>
   <section class="hero page-shell">
-    <div class="mac-bar" aria-hidden="true">
-      <span class="mac-lights"><i></i><i></i><i></i></span>
+    <div class="mac-bar">
+      <span class="mac-lights" aria-hidden="true"><i></i><i></i><i></i></span>
+      <HelloWrite />
     </div>
     <div class="hero-primary">
       <figure class="hero-portrait">
