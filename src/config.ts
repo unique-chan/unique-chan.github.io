@@ -12,7 +12,7 @@ export const site = {
   ],
   description:
     " ",
-  location: "Pangyo House, South Korea",
+  location: "Pangyo House, Republic of Korea",
   scholar: "https://scholar.google.com/citations?user=MfNZQDcAAAAJ",
   github: "https://github.com/unique-chan",
   orcid: "https://orcid.org/0000-0002-2438-3590",
