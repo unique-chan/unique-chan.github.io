@@ -3,6 +3,7 @@ import type { GetStaticPaths } from "astro";
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { formatDateRange } from "../../lib/dates";
+import "katex/dist/katex.min.css";
 
 export const getStaticPaths = (async () => {
   const projects = await getCollection("projects", ({ data }) => !data.draft);

@@ -614,13 +614,55 @@ button { font: inherit; }
 .article-header h1 { font: 500 clamp(2.5rem, 5vw, 4.4rem)/1.05 "Manrope", sans-serif; letter-spacing: -.045em; margin: 1.5rem 0; }
 .article-header > p { max-width: 720px; color: var(--muted); font-size: 1.25rem; }
 .article-layout { display: grid; grid-template-columns: minmax(0, 720px) 220px; justify-content: space-between; gap: 5rem; padding-bottom: 8rem; }
-.prose { font-size: 1.08rem; }
+/* min-width:0 or the grid item grows to fit a wide equation instead of
+   letting .katex-display scroll inside it */
+.prose { font-size: 1.08rem; min-width: 0; }
 .prose h2 { font: 500 1.7rem "Manrope", sans-serif; letter-spacing: -.025em; margin: 3.5rem 0 1rem; }
 .prose h3 { font-size: 1.2rem; margin-top: 2.5rem; }
 .prose p, .prose ul, .prose ol { color: color-mix(in srgb, var(--ink), var(--muted) 24%); }
 .prose pre { padding: 1.4rem; overflow: auto; border-radius: var(--r-md); font-size: .85rem; }
 .prose code { font-family: "DM Mono"; }
 .prose :not(pre) > code { background: var(--surface); border-radius: var(--r-xs); padding: .15rem .35rem; }
+
+/* KaTeX. Tall inline math (fractions, big operators) needs a roomier line box
+   than the 1.65 body default, or it crowds the lines above and below. */
+.prose p:has(.katex) { line-height: 1.85; }
+/* a long display equation scrolls on its own; body has overflow-x: hidden,
+   so without this it would simply be cut off on a phone */
+.prose .katex-display {
+  margin: 2rem 0;
+  padding: .4rem .1rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* markdown tables — rules only, no fills, to sit with the rest of the page */
+/* shrink to fit: stretching to 100% dumps all the slack into the first column */
+.prose table {
+  width: auto;
+  max-width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  font-size: .96em;
+}
+.prose thead th {
+  padding: .6rem .9rem;
+  border-bottom: 1.5px solid var(--ink);
+  font-weight: 600;
+  text-align: left;
+  vertical-align: bottom;
+}
+.prose tbody td {
+  padding: .7rem .9rem;
+  border-bottom: 1px solid var(--line);
+  color: color-mix(in srgb, var(--ink), var(--muted) 24%);
+}
+.prose tbody tr:last-child td { border-bottom: none; }
+/* markdown emits the legacy align attribute, so honour it rather than fight it */
+.prose th[align="right"], .prose td[align="right"] { text-align: right; }
+.prose th[align="center"], .prose td[align="center"] { text-align: center; }
+/* figures read better lining up on the digits */
+.prose tbody td[align="right"] { font-variant-numeric: tabular-nums; }
 .toc { position: sticky; top: 2rem; align-self: start; border-left: 1px solid var(--line); padding-left: 1.5rem; display: flex; flex-direction: column; gap: .7rem; }
 .toc a { color: var(--muted); text-decoration: none; font-size: .82rem; }
 
@@ -696,6 +738,8 @@ button { font: inherit; }
   .hero-portrait { width: min(38vw, 144px); margin-bottom: 2rem; }
   .hello-write { width: min(19vw, 68px); }
   .hero-bottom, .section-heading, .cv-grid, .article-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+  /* a table too wide for a phone scrolls itself rather than widening the page */
+  .prose table { display: block; overflow-x: auto; width: max-content; max-width: 100%; }
   .hero-facts { grid-column: auto; grid-template-columns: 1fr; margin-top: .5rem; gap: .6rem; }
   .hero-facts p { justify-content: center; }
   .hero-facts p { overflow-wrap: anywhere; }

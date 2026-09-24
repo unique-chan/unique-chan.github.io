@@ -2,6 +2,8 @@
 import type { GetStaticPaths } from "astro";
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+// only the markdown pages carry KaTeX's stylesheet — the rest of the site never needs it
+import "katex/dist/katex.min.css";
 
 export const getStaticPaths = (async () => {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
