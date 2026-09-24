@@ -10,18 +10,14 @@ const pad = (n: number) => String(n).padStart(2, "0");
 <BaseLayout title="Genealogy" description="Academic Genealogy">
   <div class="leaf-fall" aria-hidden="true"></div>
 
-  <section class="page-intro page-shell gen-intro">
-    <div>
-      <p class="eyebrow">Lineage</p>
-      <h1>Academic Genealogy</h1>
-      <p class="lede">
-      From Wolfgang Fabricius Capito to Yechan Kim
-      </p>
-    </div>
-    <TreeMark size={160} class="gen-intro-mark" />
-  </section>
+  <h1 class="sr-only">Academic Genealogy</h1>
 
   <section class="page-shell gen-wrap">
+    <div class="gen-crest">
+      <TreeMark size={160} class="gen-crest-mark" />
+      <p>From Wolfgang Fabricius Capito to Yechan Kim</p>
+    </div>
+
     <div class="gen-stats">
       <div class="gen-stat">
         <b>{generations}</b>

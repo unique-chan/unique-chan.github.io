@@ -5,14 +5,7 @@ import { site } from "../config";
 ---
 
 <BaseLayout title="CV" description={`Curriculum vitae of ${site.fullName}.`}>
-  <section class="page-intro page-shell cv-intro">
-    <div>
-      <p class="eyebrow">Curriculum vitae</p>
-      <h1>{site.fullName}</h1>
-      <p class="lede">Ph.D. in AI/Vision, now building it at LIG D&A - AI Lab.</p>
-    </div>
-<!--    <button class="print-button" type="button" onclick="window.print()">Print / save PDF</button> -->
-  </section>
+  <h1 class="sr-only">{site.fullName} — Curriculum vitae</h1>
   <section class="page-shell cv-grid">
     <aside>
       <div class="cv-affiliation">

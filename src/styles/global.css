@@ -85,6 +85,12 @@ button { font: inherit; }
 .skip-link { position: absolute; left: -9999px; }
 .skip-link:focus { left: 1rem; top: 1rem; z-index: 20; background: var(--signal); color: #111; padding: .6rem 1rem; }
 .page-shell { width: min(calc(100% - 48px), var(--max)); margin-inline: auto; }
+/* inner pages carry their title for screen readers and search only — the nav shows it visually */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
 
 .site-header {
   width: min(calc(100% - 48px), var(--max));
@@ -111,8 +117,9 @@ button { font: inherit; }
   50.001%, 100% { opacity: 0; }
 }
 .site-header nav { display: flex; gap: clamp(1rem, 3vw, 2.4rem); }
-.site-header nav a { color: var(--muted); text-decoration: none; font-size: .9rem; transition: color .15s ease; }
-.site-header nav a[aria-current="page"] { color: var(--ink); }
+.site-header nav a { color: var(--muted); text-decoration: none; font-size: .9rem; font-weight: 500; transition: color .15s ease; }
+/* the inner pages dropped their big title blocks, so the nav carries "where am I" alone */
+.site-header nav a[aria-current="page"] { color: var(--accent); font-weight: 700; }
 .site-header nav a:hover { color: var(--accent); }
 .theme-toggle {
   justify-self: end; width: 38px; height: 38px; border: 1px solid var(--line);
@@ -256,7 +263,7 @@ button { font: inherit; }
   font-family: "DM Mono", monospace; text-transform: uppercase;
   font-size: .72rem; letter-spacing: .12em; font-weight: 500;
 }
-.hero h1, .page-intro h1 {
+.hero h1 {
   font-family: "Manrope", sans-serif; font-weight: 500; line-height: .98; letter-spacing: -.055em;
   font-size: clamp(2.4rem, 4.2vw, 4rem); margin: 1rem 0 2.25rem;
 }
@@ -287,8 +294,9 @@ button { font: inherit; }
 .hero-facts p { display: flex; align-items: baseline; gap: .8rem; margin: 0; font-size: .9rem; }
 .hero-facts span { flex: none; color: var(--muted); font-family: "DM Mono"; font-size: .7rem; text-transform: uppercase; white-space: nowrap; }
 
-.section { padding: 6rem 0; border-top: 1px solid var(--line); }
-.hero + .section { border-top: none; padding-top: 3rem; }
+/* no rules between sections — the heading + whitespace carries the break */
+.section { padding: 5rem 0; }
+.hero + .section { padding-top: 3rem; }
 .section-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 1.5rem; margin-bottom: 3rem; }
 .section-heading .eyebrow { color: var(--muted); margin: 0; }
 .section-heading h2 { font-family: "Manrope", sans-serif; font-weight: 500; font-size: clamp(2rem, 3.5vw, 3.2rem); line-height: 1.05; letter-spacing: -.04em; margin: 0; }
@@ -403,19 +411,6 @@ button { font: inherit; }
 .post-card h3 { font: 500 1.3rem/1.22 "Manrope", sans-serif; letter-spacing: -.025em; margin: 1.25rem 0 .75rem; }
 .post-card h3 a { text-decoration: none; }
 .post-card p { color: var(--muted); margin: 0 0 1.25rem; }
-
-.page-intro { padding: clamp(2rem, 3.5vw, 3rem) 0 clamp(3rem, 4.5vw, 4rem); border-bottom: 1px solid var(--line); }
-.page-intro h1 { margin: 1rem 0 2rem; }
-/* short kicker rule — gives the inner pages a mark to start from */
-.page-intro .eyebrow::before {
-  content: "";
-  display: block;
-  width: 76px;
-  height: 3px;
-  margin-bottom: 1.4rem;
-  border-radius: 99px;
-  background: var(--accent);
-}
 
 .notes-layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 4rem; margin-top: 3rem; margin-bottom: 6rem; }
 .notes-search { display: flex; align-items: center; gap: .6rem; border: 1px solid var(--line); border-radius: var(--r-sm); padding: .7rem .9rem; color: var(--muted); margin-bottom: 1.5rem; }
@@ -591,6 +586,10 @@ button { font: inherit; }
 .publication-filters button::first-letter { text-decoration: underline; }
 .publication-filters button:hover { border-color: var(--ink); color: var(--ink); }
 .publication-filters button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: #fff; }
+.publication-legend {
+  margin: 1.1rem 0 0; color: var(--muted);
+  font: 500 .68rem/1 "DM Mono"; letter-spacing: .06em;
+}
 
 .publication-filter-group { display: flex; flex-direction: column; align-items: flex-start; gap: .55rem; }
 .publication-subfilters {
@@ -625,9 +624,8 @@ button { font: inherit; }
 .toc { position: sticky; top: 2rem; align-self: start; border-left: 1px solid var(--line); padding-left: 1.5rem; display: flex; flex-direction: column; gap: .7rem; }
 .toc a { color: var(--muted); text-decoration: none; font-size: .82rem; }
 
-.cv-intro { display: flex; align-items: end; justify-content: space-between; }
 .print-button { border: 1px solid var(--ink); border-radius: var(--r-sm); background: var(--ink); color: var(--bg); padding: .8rem 1.2rem; cursor: pointer; }
-.cv-grid { display: grid; grid-template-columns: 1fr 3fr; gap: 5rem; padding: 5rem 0 8rem; }
+.cv-grid { display: grid; grid-template-columns: 1fr 3fr; gap: 5rem; padding: 3rem 0 8rem; }
 .cv-grid aside { display: flex; flex-direction: column; align-items: flex-start; gap: .6rem; font-size: .9rem; }
 .cv-grid aside p { color: var(--muted); margin: 0; }
 .cv-affiliation { display: grid; gap: .35rem; margin-bottom: .75rem; }
@@ -718,7 +716,6 @@ button { font: inherit; }
   .publication-tags, .text-links { justify-content: center; }
   .publication-filters { justify-content: center; }
   .toc { display: none; }
-  .cv-intro { align-items: flex-start; flex-direction: column; gap: 2rem; }
   .cv-grid aside { align-items: center; text-align: center; }
   .cv-interests { text-align: center; }
   .site-footer { grid-template-columns: 1fr; gap: 4rem; }
@@ -759,10 +756,17 @@ button { font: inherit; }
 
 .gen-wrap { padding: clamp(2.5rem, 4vw, 3.5rem) 0 7rem; }
 
-.gen-intro { display: flex; align-items: flex-end; justify-content: space-between; gap: clamp(1.5rem, 4vw, 3rem); }
-.gen-intro > div { min-width: 0; }
 .tree-mark { display: block; flex: none; color: var(--muted); }
-.gen-intro-mark { color: var(--ink); margin-bottom: .35rem; }
+/* the pixel tree lost its title block, so it now opens the page on its own */
+.gen-crest {
+  display: grid; justify-items: center; gap: 1.1rem;
+  margin-bottom: clamp(2.5rem, 4vw, 3.5rem);
+}
+.gen-crest p {
+  margin: 0; color: var(--muted); text-align: center;
+  font: 500 .72rem/1.5 "DM Mono"; text-transform: uppercase; letter-spacing: .12em;
+}
+.gen-crest-mark { color: var(--ink); }
 .gen-card-mark { color: var(--bg); opacity: .85; margin: .15rem 0; }
 
 /* pixel christmas tree: bricks drop in row by row, then light rains down the tree */
@@ -890,8 +894,7 @@ button { font: inherit; }
 @media (max-width: 860px) {
   .gen-stats { grid-template-columns: 1fr; }
   .gen-tree { --spine: 15px; max-width: none; }
-  .gen-intro { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
-  .gen-intro-mark { order: -1; width: 96px; height: 96px; margin-bottom: 0; }
+  .gen-crest-mark { width: 104px; height: 104px; }
 
   /* every connector collapses to one rail segment on the left */
   .gen-link, .gen-link.is-split, .gen-link.is-merge, .gen-link.is-bridge { height: 22px; }
@@ -927,6 +930,5 @@ button { font: inherit; }
   .hero::before, .mac-bar { display: none; }
   :root { --bg: #fff; --ink: #000; --muted: #444; }
   body { background-image: none; }
-  .page-intro { padding: 1rem 0 2rem; }
   .cv-grid { padding-top: 2rem; }
 }

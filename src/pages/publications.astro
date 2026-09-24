@@ -43,11 +43,7 @@ const types = [
 ---
 
 <BaseLayout title="Publications" description="Peer-reviewed papers, preprints, and research artifacts.">
-  <section class="page-intro page-shell">
-    <p class="eyebrow">Research output</p>
-    <h1>Publications</h1>
-    <p class="lede">✝ denotes a corresponding author</p>
-  </section>
+  <h1 class="sr-only">Publications</h1>
   <section class="page-shell">
     <div class="publication-filters" aria-label="Filter publications by type">
       {types.map((type, index) =>
@@ -103,6 +99,7 @@ const types = [
         )
       )}
     </div>
+    <p class="publication-legend">✝ denotes a corresponding author</p>
     {years.map((year) => (
       <div class="year-group" data-year-group>
         <h2>{year}</h2>
