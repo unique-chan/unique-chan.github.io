@@ -447,7 +447,7 @@ $$
 입니다.
 
 
-## [부록] Jensen 부등식
+## [부록] Jensen 부등식과 Log 함수
 
 젠센 부등식 (Jensen's Inequality)은 
 
@@ -463,25 +463,73 @@ Log는 아래로 휘어진 오목 함수 (Concave)라서,
 
 
 <div id="jensen-demo" style="max-width:860px;margin:28px 0;padding:24px;border:1px solid #d8dee8;border-radius:18px;background:#fff;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#111827;box-sizing:border-box;">
-<div style="font-size:26px;font-weight:800;margin-bottom:8px;">Jensen's Inequality for <span style="color:#2563eb;">Log(x)</span></div>
-<div style="font-size:16px;line-height:1.7;color:#4b5563;margin-bottom:14px;">두 점을 잇는 직선은 Log 곡선보다 아래에 놓입니다.</div>
-<div style="display:inline-block;margin-bottom:16px;padding:7px 12px;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-size:14px;font-weight:700;">예시: x₁ = 1, x₂ = 9</div>
+
+<div style="font-size:26px;font-weight:800;margin-bottom:8px;">
+Jensen's Inequality for <span style="color:#2563eb;">Log(x)</span>
+</div>
+
+<div style="font-size:16px;line-height:1.7;color:#4b5563;margin-bottom:18px;">
+두 점을 잇는 직선은 Log 곡선보다 아래에 놓입니다.
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">
+
+<div style="padding:14px 16px;border:1px solid #dbe3ef;border-radius:14px;background:#f8fafc;">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+<span style="font-size:14px;font-weight:700;color:#374151;">x₁</span>
+<span id="x1-value" style="font-size:14px;font-weight:800;color:#2563eb;">1.0</span>
+</div>
+<input
+id="x1-slider"
+type="range"
+min="0.5"
+max="9.5"
+step="0.1"
+value="1"
+style="width:100%;cursor:pointer;"
+>
+</div>
+
+<div style="padding:14px 16px;border:1px solid #dbe3ef;border-radius:14px;background:#f8fafc;">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+<span style="font-size:14px;font-weight:700;color:#374151;">x₂</span>
+<span id="x2-value" style="font-size:14px;font-weight:800;color:#2563eb;">9.0</span>
+</div>
+<input
+id="x2-slider"
+type="range"
+min="0.5"
+max="9.5"
+step="0.1"
+value="9"
+style="width:100%;cursor:pointer;"
+>
+</div>
+
+</div>
+
+<div id="jensen-summary" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;font-size:13px;color:#4b5563;">
+</div>
+
 <div style="position:relative;width:100%;aspect-ratio:16/9;min-height:340px;">
 <canvas id="jensen-canvas" style="display:block;width:100%;height:100%;"></canvas>
 </div>
+
 </div>
 
 <script>
 (() => {
 const root = document.getElementById("jensen-demo");
 const canvas = document.getElementById("jensen-canvas");
-if (!root || !canvas) return;
+const x1Slider = document.getElementById("x1-slider");
+const x2Slider = document.getElementById("x2-slider");
+const x1Value = document.getElementById("x1-value");
+const x2Value = document.getElementById("x2-value");
+const summary = document.getElementById("jensen-summary");
+
+if (!root || !canvas || !x1Slider || !x2Slider) return;
 
 const ctx = canvas.getContext("2d");
-
-const X1 = 1;
-const X2 = 9;
-const XM = (X1 + X2) / 2;
 
 const COLORS = {
 text: "#111827",
@@ -520,7 +568,6 @@ border = "#e5e7eb",
 color = COLORS.text,
 font = "600 14px system-ui",
 padX = 10,
-padY = 7,
 radius = 10,
 align = "left"
 } = opts;
@@ -553,7 +600,73 @@ ctx.fillText(text, bx + padX, y);
 ctx.restore();
 }
 
+function point(x, y, fill, r = 8, halo = null) {
+ctx.save();
+
+if (halo) {
+ctx.beginPath();
+ctx.arc(x, y, r + 9, 0, Math.PI * 2);
+ctx.fillStyle = halo;
+ctx.fill();
+}
+
+ctx.beginPath();
+ctx.arc(x, y, r, 0, Math.PI * 2);
+ctx.fillStyle = fill;
+ctx.fill();
+
+ctx.restore();
+}
+
+function pill(text, bg, color, border) {
+return `
+<span style="
+display:inline-block;
+padding:5px 9px;
+border-radius:999px;
+background:${bg};
+color:${color};
+border:1px solid ${border};
+font-weight:700;
+">
+${text}
+</span>
+`;
+}
+
 function draw() {
+const X1 = Number(x1Slider.value);
+const X2 = Number(x2Slider.value);
+const XM = (X1 + X2) / 2;
+
+x1Value.textContent = X1.toFixed(1);
+x2Value.textContent = X2.toFixed(1);
+
+const log = x => Math.log(x);
+
+const meanCurveValue = log(XM);
+const meanChordValue = (log(X1) + log(X2)) / 2;
+
+summary.innerHTML =
+pill(
+`Log(mean) = ${meanCurveValue.toFixed(3)}`,
+COLORS.greenBg,
+COLORS.greenDark,
+COLORS.greenBorder
+) +
+pill(
+`mean(Log) = ${meanChordValue.toFixed(3)}`,
+COLORS.redBg,
+COLORS.redDark,
+COLORS.redBorder
+) +
+pill(
+`gap = ${(meanCurveValue - meanChordValue).toFixed(3)}`,
+"#f8fafc",
+COLORS.text,
+"#e5e7eb"
+);
+
 const rect = canvas.getBoundingClientRect();
 const dpr = Math.max(1, window.devicePixelRatio || 1);
 
@@ -587,8 +700,6 @@ margin.left + ((x - xmin) / (xmax - xmin)) * plotW;
 const sy = y =>
 margin.top + ((ymax - y) / (ymax - ymin)) * plotH;
 
-const log = x => Math.log(x);
-
 ctx.save();
 ctx.strokeStyle = COLORS.grid;
 ctx.lineWidth = 1;
@@ -608,6 +719,7 @@ ctx.moveTo(margin.left, y);
 ctx.lineTo(margin.left + plotW, y);
 ctx.stroke();
 }
+
 ctx.restore();
 
 ctx.save();
@@ -624,6 +736,7 @@ ctx.fillStyle = COLORS.muted;
 ctx.font = "600 14px system-ui";
 ctx.fillText("Log(x)", 8, margin.top + 4);
 ctx.fillText("x", margin.left + plotW - 2, margin.top + plotH + 30);
+
 ctx.restore();
 
 ctx.save();
@@ -633,15 +746,20 @@ ctx.lineCap = "round";
 ctx.lineJoin = "round";
 ctx.beginPath();
 
-const N = 400;
+const N = 500;
+
 for (let i = 0; i <= N; i++) {
 const x = xmin + ((xmax - xmin) * i) / N;
 const px = sx(x);
 const py = sy(log(x));
 
-if (i === 0) ctx.moveTo(px, py);
-else ctx.lineTo(px, py);
+if (i === 0) {
+ctx.moveTo(px, py);
+} else {
+ctx.lineTo(px, py);
 }
+}
+
 ctx.stroke();
 ctx.restore();
 
@@ -657,10 +775,8 @@ y: sy(log(X2))
 
 const meanCurve = {
 x: sx(XM),
-y: sy(log(XM))
+y: sy(meanCurveValue)
 };
-
-const meanChordValue = (log(X1) + log(X2)) / 2;
 
 const meanChord = {
 x: sx(XM),
@@ -671,78 +787,120 @@ ctx.save();
 ctx.strokeStyle = COLORS.chord;
 ctx.lineWidth = 4;
 ctx.lineCap = "round";
+
 ctx.beginPath();
 ctx.moveTo(p1.x, p1.y);
 ctx.lineTo(p2.x, p2.y);
 ctx.stroke();
-ctx.restore();
-
-function point(x, y, fill, r = 8, halo = null) {
-ctx.save();
-
-if (halo) {
-ctx.beginPath();
-ctx.arc(x, y, r + 9, 0, Math.PI * 2);
-ctx.fillStyle = halo;
-ctx.fill();
-}
-
-ctx.beginPath();
-ctx.arc(x, y, r, 0, Math.PI * 2);
-ctx.fillStyle = fill;
-ctx.fill();
 
 ctx.restore();
-}
 
 point(p1.x, p1.y, COLORS.black, 8);
 point(p2.x, p2.y, COLORS.black, 8);
 
 ctx.save();
+
 ctx.strokeStyle = COLORS.green;
 ctx.lineWidth = 2.5;
 ctx.setLineDash([6, 5]);
+
 ctx.beginPath();
 ctx.moveTo(meanCurve.x, meanCurve.y);
 ctx.lineTo(meanChord.x, meanChord.y);
 ctx.stroke();
+
 ctx.restore();
 
-point(meanCurve.x, meanCurve.y, COLORS.green, 9, "rgba(34,197,94,0.16)");
-point(meanChord.x, meanChord.y, COLORS.red, 9, "rgba(239,68,68,0.16)");
+point(
+meanCurve.x,
+meanCurve.y,
+COLORS.green,
+9,
+"rgba(34,197,94,0.16)"
+);
 
-label("x₁ = 1", p1.x + 10, p1.y + 34, {
+point(
+meanChord.x,
+meanChord.y,
+COLORS.red,
+9,
+"rgba(239,68,68,0.16)"
+);
+
+const leftPoint = X1 <= X2 ? p1 : p2;
+const rightPoint = X1 <= X2 ? p2 : p1;
+
+const leftText = X1 <= X2
+? `x₁ = ${X1.toFixed(1)}`
+: `x₂ = ${X2.toFixed(1)}`;
+
+const rightText = X1 <= X2
+? `x₂ = ${X2.toFixed(1)}`
+: `x₁ = ${X1.toFixed(1)}`;
+
+label(
+leftText,
+leftPoint.x + 8,
+leftPoint.y + 34,
+{
 font: "500 13px system-ui"
-});
+}
+);
 
-label("x₂ = 9", p2.x - 4, p2.y - 36, {
+label(
+rightText,
+rightPoint.x - 4,
+rightPoint.y - 36,
+{
 align: "center",
 font: "500 13px system-ui"
-});
+}
+);
 
-label("log(mean)", meanCurve.x + 26, meanCurve.y - 34, {
+label(
+"log(mean)",
+meanCurve.x + 24,
+meanCurve.y - 34,
+{
 bg: COLORS.greenBg,
 border: COLORS.greenBorder,
 color: COLORS.greenDark,
 font: "700 14px system-ui"
-});
+}
+);
 
-label("mean(log)", meanChord.x + 26, meanChord.y + 34, {
+label(
+"mean(log)",
+meanChord.x + 24,
+meanChord.y + 34,
+{
 bg: COLORS.redBg,
 border: COLORS.redBorder,
 color: COLORS.redDark,
 font: "700 14px system-ui"
-});
+}
+);
 
 ctx.save();
+
 ctx.fillStyle = COLORS.curve;
 ctx.font = "700 14px system-ui";
-ctx.fillText("y = log(x)", sx(7.5), sy(log(7.5)) - 18);
+
+ctx.fillText(
+"y = Log(x)",
+sx(7.4),
+sy(log(7.4)) - 18
+);
+
 ctx.restore();
 }
 
+x1Slider.addEventListener("input", draw);
+x2Slider.addEventListener("input", draw);
+
 const ro = new ResizeObserver(draw);
 ro.observe(root);
+
 draw();
 })();
 </script>
@@ -781,11 +939,17 @@ $$
 가 됩니다.
 
 
-더 일반화해서 쓰면,
+두 점에 대한 경우를 확률변수 (단, $X > 0$)의 기댓값으로 일반화하면,
 
 $$
+\boxed{
 \mathbb E[\log X]
 \le
-\log\mathbb E[X].
+\log\mathbb E[X]
+}
 $$
 
+입니다.
+
+
+즉, **먼저 Log를 취한 뒤 평균내는 것**보다 **먼저 평균을 낸 뒤 Log를 취하는 것**이 항상 크거나 같습니다.
