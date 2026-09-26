@@ -227,7 +227,7 @@ $$
 이라면, $P$에서 실제로 발생할 수 있는 사건이 $Q$에서는 불가능하다고 선언한 것입니다. 이 경우
 $$
 % \frac{p(x)}{q(x)} = \infty
-\lim_{x\to 0} \left| \frac{p(x)}{q(x)} \right| =\infty
+\lim_{q(x)\to 0} \left| \frac{p(x)}{q(x)} \right| =\infty
 $$ 
 이므로,
 
