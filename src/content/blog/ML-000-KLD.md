@@ -68,9 +68,9 @@ $$
 $n$개의 관측 데이터 ${x_1, \ldots, x_n}$이 있다고 합시다. 또, 이 관측들은 확률분포 $P$와 $Q$ 모두에서 각각 Independent (독립)이라고 가정합시다. 그러면 $n$개 관측에 대한, $P$와 $Q$ 각각에서 결합확률은 
 
 $$
-p(x_{1})=\prod_{i=1}^n p(x_i),
+p(X)=\prod_{i=1}^n p(x_i),
 \qquad
-q(x_{1})=\prod_{i=1}^n q(x_i)
+q(X)=\prod_{i=1}^n q(x_i)
 $$
 
 이고, 전체 Likelihood Ratio는
