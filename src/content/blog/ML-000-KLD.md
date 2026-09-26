@@ -358,3 +358,7 @@ $$
 
 물론 유한한 표본에서 $\widehat D_n$이 KL과 정확히 같지 않으며, 표본에 따라 음수가 될 수도 있습니다.
 
+
+## 9. MLE (Maximum Likelihood Estimation)와 KL 발산 최소화?
+
+.
