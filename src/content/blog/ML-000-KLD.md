@@ -117,7 +117,7 @@ $$
 \end{aligned}
 $$
 
-이며, 증거량의 단위는 Bit입니다. Likelihood Ratio가 2배가 되는 것을 1 Bit의 증거로 정하겠다는 의미입니다.
+이며, 증거량의 단위는 Bit입니다. Likelihood Ratio가 2배가 되는 것을 1 Bit의 증거로 정하겠다는 의미이기도 하죠.
 
 만약 Likelihood Ratio가 3이라면, 증거량은
 
