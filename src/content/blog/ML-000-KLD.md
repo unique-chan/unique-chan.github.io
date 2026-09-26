@@ -347,7 +347,7 @@ $$
 
 $\widehat D_n$은 KL 자체가 아니라 표본에 따라 값이 달라지는 확률변수입니다. 
 
-다만 큰수의 법칙에 따라, 
+다만 큰 수의 법칙에 따라, 
 $$
 \widehat D_n
 \xrightarrow{\mathrm{a.s.}}
