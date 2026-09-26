@@ -256,7 +256,7 @@ $$
 D_{\mathrm{KL}}(P||Q) \ge 0.
 $$
 
-이는 Jensen 부등식으로 증명할 수 있습니다. 분포 $P$의 Support를 
+이는 [Jensen 부등식](#부록-jensen-부등식)으로 증명할 수 있습니다. 분포 $P$의 Support를 
 $$
 \operatorname{supp}(P)
 =
@@ -361,4 +361,431 @@ $$
 
 ## 9. MLE (Maximum Likelihood Estimation)와 KL 발산 최소화?
 
-.
+실제 데이터 분포를 $P$, 학습하려는 모델의 분포를 $Q_\theta$라고 하겠습니다. 모집단 수준에서 모델의 기대 Negative Log-Likelihood는
+
+$$
+\mathcal L(\theta) = \mathbb E_{X\sim P}
+\left[
+-\log q_\theta(X)
+\right]
+$$
+
+입니다.
+
+위 식에 $\log p(X)$를 더하고 빼면,
+
+$$
+\begin{aligned}
+\mathcal L(\theta)
+&=
+\mathbb E_P[-\log p(X)]
++
+\mathbb E_P
+\left[
+\log\frac{p(X)}{q_\theta(X)}
+\right] \\
+&=
+H(P)
++
+D_{\mathrm{KL}}(P || Q_\theta).
+\end{aligned}
+$$
+
+여기서 $H(P)$는 실제 데이터 분포 $P$에 대한 Entropy입니다. ($P$가 고정되어 있으면) $H(P)$는 모델 파라미터 ($\theta$)와 무관한 상수이므로,
+
+$$
+\arg\min_\theta
+D_{\mathrm{KL}}(P || Q_\theta).
+$$
+
+즉, 모집단의 기대 Negative Log-Likelihood를 최소화하는 모델은 $D_{\mathrm{KL}}(P|| Q_\theta)$를 최소화하는 모델과 같습니다.
+
+다만 실제로는 $P$에 대한 기댓값으로 $D_{\mathrm{KL}}(P|| Q_\theta)$를 직접 구할 수 없습니다. $p(x)$를 알 수 없기 때문이죠. 대신 $P$에서 (독립적으로) 얻은 관측 데이터 
+
+$$
+x_1,\ldots, x_n\overset{\mathrm{iid}}{\sim}P
+$$
+
+를 사용하여 Empirical Negative Log-Likelihood
+
+$$
+-\frac1n
+\sum_{i=1}^n
+\log q_\theta(X_i)
+$$
+
+를 최소화합니다 (사실 $n$은 모델 파라미터와 무관하므로, $\frac1n$을 생략한 $- \sum_{i=1}^n
+\log q_\theta(X_i)$를 최소화합니다). 그런데 잘 살펴보니, 이것은 사실 Maximum Likelihood Estimation 입니다.
+
+$$
+\begin{aligned}
+\widehat\theta_n
+&\in
+\arg\max_\theta
+\prod_{i=1}^n q_\theta(x_i)\\
+& =
+\arg\max_\theta
+\sum_{i=1}^n\log q_\theta(x_i)\\
+&=
+\arg\min_\theta
+\left[ - \sum_{i=1}^n
+\log q_\theta(x_i) \right] \\
+& \approx
+\arg\min_\theta
+D_{\mathrm{KL}}(P || Q_\theta).
+\end{aligned}
+$$
+
+## 10. 연속확률분포
+
+지금까지는 편의상 이산확률분포를 이용해서 KL 발산을 설명했습니다. 다만, KL 발산은 연속확률분포에서도 정의 가능합니다.
+
+연속확률분포에서는 확률질량함수 대신 동일한 기준측도에 대한 확률밀도함수 ($p$, $q$)를 사용합니다. 그리고 이를 통해 KL 발산을 정의하면:
+$$
+\int p(x)\log\frac{p(x)}{q(x)}dx
+$$
+입니다.
+
+
+## [부록] Jensen 부등식
+
+젠센 부등식 (Jensen's Inequality)은 
+
+> ``평균을 먼저 계산해서 함수에 넣는 것``과 
+
+> ``각각 함수에 넣은 다음, 평균을 내는 것``을 
+
+비교하는 부등식 입니다.
+
+
+Log는 아래로 휘어진 오목 함수 (Concave)라서,
+
+
+
+<div id="jensen-demo" style="max-width:860px;margin:28px 0;padding:24px;border:1px solid #d8dee8;border-radius:18px;background:#fff;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#111827;box-sizing:border-box;">
+<div style="font-size:26px;font-weight:800;margin-bottom:8px;">Jensen's Inequality for <span style="color:#2563eb;">Log(x)</span></div>
+<div style="font-size:16px;line-height:1.7;color:#4b5563;margin-bottom:14px;">두 점을 잇는 직선은 Log 곡선보다 아래에 놓입니다.</div>
+<div style="display:inline-block;margin-bottom:16px;padding:7px 12px;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-size:14px;font-weight:700;">예시: x₁ = 1, x₂ = 9</div>
+<div style="position:relative;width:100%;aspect-ratio:16/9;min-height:340px;">
+<canvas id="jensen-canvas" style="display:block;width:100%;height:100%;"></canvas>
+</div>
+</div>
+
+<script>
+(() => {
+const root = document.getElementById("jensen-demo");
+const canvas = document.getElementById("jensen-canvas");
+if (!root || !canvas) return;
+
+const ctx = canvas.getContext("2d");
+
+const X1 = 1;
+const X2 = 9;
+const XM = (X1 + X2) / 2;
+
+const COLORS = {
+text: "#111827",
+muted: "#6b7280",
+axis: "#94a3b8",
+grid: "#e8edf4",
+curve: "#3b82f6",
+chord: "#f87171",
+green: "#22c55e",
+greenDark: "#15803d",
+greenBg: "#f0fdf4",
+greenBorder: "#bbf7d0",
+red: "#ef4444",
+redDark: "#dc2626",
+redBg: "#fef2f2",
+redBorder: "#fecaca",
+black: "#111827",
+white: "#ffffff"
+};
+
+function roundRect(x, y, w, h, r) {
+const rr = Math.min(r, w / 2, h / 2);
+ctx.beginPath();
+ctx.moveTo(x + rr, y);
+ctx.arcTo(x + w, y, x + w, y + h, rr);
+ctx.arcTo(x + w, y + h, x, y + h, rr);
+ctx.arcTo(x, y + h, x, y, rr);
+ctx.arcTo(x, y, x + w, y, rr);
+ctx.closePath();
+}
+
+function label(text, x, y, opts = {}) {
+const {
+bg = COLORS.white,
+border = "#e5e7eb",
+color = COLORS.text,
+font = "600 14px system-ui",
+padX = 10,
+padY = 7,
+radius = 10,
+align = "left"
+} = opts;
+
+ctx.save();
+ctx.font = font;
+ctx.textBaseline = "middle";
+
+const tw = ctx.measureText(text).width;
+const w = tw + padX * 2;
+const h = 32;
+
+let bx = x;
+if (align === "center") bx = x - w / 2;
+if (align === "right") bx = x - w;
+
+const by = y - h / 2;
+
+ctx.fillStyle = bg;
+ctx.strokeStyle = border;
+ctx.lineWidth = 1;
+
+roundRect(bx, by, w, h, radius);
+ctx.fill();
+ctx.stroke();
+
+ctx.fillStyle = color;
+ctx.fillText(text, bx + padX, y);
+
+ctx.restore();
+}
+
+function draw() {
+const rect = canvas.getBoundingClientRect();
+const dpr = Math.max(1, window.devicePixelRatio || 1);
+
+const W = Math.round(rect.width);
+const H = Math.round(rect.height);
+
+canvas.width = Math.round(W * dpr);
+canvas.height = Math.round(H * dpr);
+
+ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+ctx.clearRect(0, 0, W, H);
+
+const margin = {
+left: 62,
+right: 28,
+top: 24,
+bottom: 46
+};
+
+const plotW = W - margin.left - margin.right;
+const plotH = H - margin.top - margin.bottom;
+
+const xmin = 0.45;
+const xmax = 10;
+const ymin = -0.9;
+const ymax = 2.5;
+
+const sx = x =>
+margin.left + ((x - xmin) / (xmax - xmin)) * plotW;
+
+const sy = y =>
+margin.top + ((ymax - y) / (ymax - ymin)) * plotH;
+
+const log = x => Math.log(x);
+
+ctx.save();
+ctx.strokeStyle = COLORS.grid;
+ctx.lineWidth = 1;
+
+for (let i = 0; i <= 8; i++) {
+const x = margin.left + (plotW * i) / 8;
+ctx.beginPath();
+ctx.moveTo(x, margin.top);
+ctx.lineTo(x, margin.top + plotH);
+ctx.stroke();
+}
+
+for (let i = 0; i <= 6; i++) {
+const y = margin.top + (plotH * i) / 6;
+ctx.beginPath();
+ctx.moveTo(margin.left, y);
+ctx.lineTo(margin.left + plotW, y);
+ctx.stroke();
+}
+ctx.restore();
+
+ctx.save();
+ctx.strokeStyle = COLORS.axis;
+ctx.lineWidth = 1.5;
+
+ctx.beginPath();
+ctx.moveTo(margin.left, margin.top);
+ctx.lineTo(margin.left, margin.top + plotH);
+ctx.lineTo(margin.left + plotW, margin.top + plotH);
+ctx.stroke();
+
+ctx.fillStyle = COLORS.muted;
+ctx.font = "600 14px system-ui";
+ctx.fillText("Log(x)", 8, margin.top + 4);
+ctx.fillText("x", margin.left + plotW - 2, margin.top + plotH + 30);
+ctx.restore();
+
+ctx.save();
+ctx.strokeStyle = COLORS.curve;
+ctx.lineWidth = 3;
+ctx.lineCap = "round";
+ctx.lineJoin = "round";
+ctx.beginPath();
+
+const N = 400;
+for (let i = 0; i <= N; i++) {
+const x = xmin + ((xmax - xmin) * i) / N;
+const px = sx(x);
+const py = sy(log(x));
+
+if (i === 0) ctx.moveTo(px, py);
+else ctx.lineTo(px, py);
+}
+ctx.stroke();
+ctx.restore();
+
+const p1 = {
+x: sx(X1),
+y: sy(log(X1))
+};
+
+const p2 = {
+x: sx(X2),
+y: sy(log(X2))
+};
+
+const meanCurve = {
+x: sx(XM),
+y: sy(log(XM))
+};
+
+const meanChordValue = (log(X1) + log(X2)) / 2;
+
+const meanChord = {
+x: sx(XM),
+y: sy(meanChordValue)
+};
+
+ctx.save();
+ctx.strokeStyle = COLORS.chord;
+ctx.lineWidth = 4;
+ctx.lineCap = "round";
+ctx.beginPath();
+ctx.moveTo(p1.x, p1.y);
+ctx.lineTo(p2.x, p2.y);
+ctx.stroke();
+ctx.restore();
+
+function point(x, y, fill, r = 8, halo = null) {
+ctx.save();
+
+if (halo) {
+ctx.beginPath();
+ctx.arc(x, y, r + 9, 0, Math.PI * 2);
+ctx.fillStyle = halo;
+ctx.fill();
+}
+
+ctx.beginPath();
+ctx.arc(x, y, r, 0, Math.PI * 2);
+ctx.fillStyle = fill;
+ctx.fill();
+
+ctx.restore();
+}
+
+point(p1.x, p1.y, COLORS.black, 8);
+point(p2.x, p2.y, COLORS.black, 8);
+
+ctx.save();
+ctx.strokeStyle = COLORS.green;
+ctx.lineWidth = 2.5;
+ctx.setLineDash([6, 5]);
+ctx.beginPath();
+ctx.moveTo(meanCurve.x, meanCurve.y);
+ctx.lineTo(meanChord.x, meanChord.y);
+ctx.stroke();
+ctx.restore();
+
+point(meanCurve.x, meanCurve.y, COLORS.green, 9, "rgba(34,197,94,0.16)");
+point(meanChord.x, meanChord.y, COLORS.red, 9, "rgba(239,68,68,0.16)");
+
+label("x₁ = 1", p1.x + 10, p1.y + 34, {
+font: "500 13px system-ui"
+});
+
+label("x₂ = 9", p2.x - 4, p2.y - 36, {
+align: "center",
+font: "500 13px system-ui"
+});
+
+label("log(mean)", meanCurve.x + 26, meanCurve.y - 34, {
+bg: COLORS.greenBg,
+border: COLORS.greenBorder,
+color: COLORS.greenDark,
+font: "700 14px system-ui"
+});
+
+label("mean(log)", meanChord.x + 26, meanChord.y + 34, {
+bg: COLORS.redBg,
+border: COLORS.redBorder,
+color: COLORS.redDark,
+font: "700 14px system-ui"
+});
+
+ctx.save();
+ctx.fillStyle = COLORS.curve;
+ctx.font = "700 14px system-ui";
+ctx.fillText("y = log(x)", sx(7.5), sy(log(7.5)) - 18);
+ctx.restore();
+}
+
+const ro = new ResizeObserver(draw);
+ro.observe(root);
+draw();
+})();
+</script>
+
+
+
+즉,
+
+$$
+\log\left(\frac{x_1+x_2}{2}\right)
+\ge
+\frac{\log x_1+\log x_2}{2}
+$$
+
+입니다.
+
+예를 들어 $(x_1=1, x_2=9)$이면,
+
+$$
+\log 5 \approx 1.609
+$$
+
+이고,
+
+$$
+\frac{\log 1+\log 9}{2}
+\approx 1.099
+$$
+
+이므로,
+
+$$
+1.609 \ge 1.099
+$$
+
+가 됩니다.
+
+
+더 일반화해서 쓰면,
+
+$$
+\mathbb E[\log X]
+\le
+\log\mathbb E[X].
+$$
+
