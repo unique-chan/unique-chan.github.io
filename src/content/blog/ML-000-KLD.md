@@ -7,7 +7,7 @@ language: "ko"
 draft: false # false로 해야 웹 사이트에 표시됨!
 ---
 
-Kullback-Leibler Divergence (KL 발산)은 두 확률분포의 차이를 측정하는 양입니다. 예로 같은 표본공간 위에 두 확률분포 $P$와 $Q$가 있다고 합시다. 일단은 두 분포 모두 이산확률분포라고 가정하고, 각각의 확률질량함수를 각각 $p(\cdot)$와 $q(\cdot)$라고 씁시다. 이때 $P$와 $Q$에 대한 KL 발산 $D_{\mathrm{KL}}(P || Q)$은 다음과 같의 정의합니다:
+Kullback-Leibler Divergence (KL 발산)은 두 확률분포의 차이를 측정하는 양입니다. 같은 표본공간 위에 두 확률분포 $P$와 $Q$가 있다고 합시다. 일단은 두 분포 모두 이산확률분포라고 가정하고, 각각의 확률질량함수를 각각 $p(\cdot)$와 $q(\cdot)$라고 씁시다. 이때 $P$와 $Q$에 대한 KL 발산 $D_{\mathrm{KL}}(P || Q)$은 다음과 같습니다:
 
 $$
 \begin{aligned}
