@@ -351,7 +351,7 @@ $\widehat D_n$은 KL 자체가 아니라 표본에 따라 값이 달라지는 �
 $$
 \widehat D_n
 \xrightarrow{\mathrm{a.s.}}
-D_{\mathrm{KL}}(P||Q)
+D_{\mathrm{KL}}(P||Q).
 $$
 
 따라서 $\widehat D_n$은 이론적 KL 발산의 Monte Carlo 추정량으로 사용할 수도 있습니다.
