@@ -198,3 +198,159 @@ $D_{\mathrm{KL}}(P || Q)$는 $P$가 생성하는 영역 (혹은 $P$에서 관측
 
 이 현상을 조금 있어보이게 말하면, KL 발산은 대칭성을 만족하지 않으므로 (- 삼각부등식도 만족하지 않지만 -), 엄밀하게는, 거리 (Distance)로 이용할 수 없습니다.
 
+
+## 7. 절대연속성과 무한대인 KL 발산
+
+$D_{\mathrm{KL}}(P || Q)$가 유한하려면, $P$에서 관측 가능한 결과가 $Q$에서도 관측할 수 있어야 합니다.
+
+특히, 이산분포에서는 
+
+$$
+p(x) > 0 \implies q(x) > 0
+$$
+
+이어야 합니다. 이를 측도론적으로 $P$가 $Q$에 대해 절대연속이라고 하고,
+
+$$
+P \ll Q
+$$ 
+
+라고 표기합니다.
+
+
+만약 어떤 $x$에서
+
+$$
+p(x) > 0, \quad q(x) = 0
+$$
+
+이라면, $P$에서 실제로 발생할 수 있는 사건이 $Q$에서는 불가능하다고 선언한 것입니다. 이 경우
+$$
+\frac{p(x)}{q(x)} = \infty
+$$ 
+이므로,
+
+$$
+D_{\mathrm{KL}}(P||Q)=\infty
+$$ 
+로 이어집니다.
+
+
+반대로 $p(x) = 0$이고 $q(x) > 0$인 영역은 $D_{\mathrm{KL}}(P||Q)$의 기댓값에 직접 나타나지 않습니다. $P$에서는 해당 영역이 관측되지 않기 때문입니다. 이것 역시 KL 발산이 비대칭인 이유 중 하나입니다.
+
+
+## 7. 왜 KL 발산은 항상 0 이상일까?
+
+개별 관측에서
+
+$$
+\log \frac{p(x)}{q(x)} < 0,
+$$
+
+즉 음수의 증거량이 존재할 수 있습니다. 어떤 관측은 분포 $P$보다 분포 $Q$를 지지할 수 있기 때문입니다.
+
+그러나, KL 발산은 그럼에도 **항상 0 이상**입니다. 분포 $P$와 분포 $Q$가 완전히 동일하면 KL 발산은 0, 그렇지 않을 경우 0보다 큰 양수입니다:
+
+$$
+D_{\mathrm{KL}}(P||Q) \ge 0.
+$$
+
+이는 Jensen 부등식으로 증명할 수 있습니다. 분포 $P$의 Support를 
+$$
+\operatorname{supp}(P)
+=
+\{x:p(x)>0\}
+$$
+
+라고 합시다. $\operatorname{supp}(P)$에서 
+
+$$
+R(X)=\frac{q(X)}{p(X)}
+$$ 
+
+라고 두면, $D_{\mathrm{KL}}(P||Q)$는 다음과 같이 쓸 수 있습니다:
+
+$$
+\begin{aligned}
+D_{\mathrm{KL}}(P||Q) &=   \sum_x p(x)\log\frac{p(x)}{q(x)}  \\
+&= \sum_x p(x) \left[ \log p(x) - \log q(x) \right] \\
+&= - \sum_x p(x) \left[ \log q(x) - \log p(x)  \right] \\
+&= - \sum_x p(x) \log \frac{q(x)}{p(x)} \\
+&= - \mathbb{E}_{X \sim P} \left[ \log R(X) \right]
+\end{aligned}
+$$
+
+Log는 오목함수 (Concave)이므로, Jensen 부등식에 따라서,
+
+$$
+\mathbb E_P[\log R(X)]
+\le
+\log\mathbb E_P[R(X)].
+$$
+
+그리고
+
+$$
+\begin{aligned}
+\mathbb E_P[R(X)] &= \sum_{x \sim \operatorname{supp}(P)} p(x) \cdot \frac{q(x)}{p(x)}  \\
+&= \sum_{x \sim \operatorname{supp}(P)}q(x) \le 1
+\end{aligned}
+$$
+
+(위 수식에서는, $P$의 Support, $\operatorname{supp}(P)$ (- 즉 $p(x)$가 양수인 $x$ 영역 -)에 대해서만 $q(x)$를 적분하므로, 보통은 확률의 총합인 1 (- 즉 $\sum_{x}q(x) = 1$ -)보다 작은 경우가 일반적입니다.)
+
+이므로, 
+
+$$
+\begin{aligned}
+\mathbb E_P[\log R(X)]
+& \le
+\log\mathbb E_P[R(X)] \\
+& \le 
+\log 1 = 0
+\end{aligned}
+$$
+이고, 따라서
+
+$$
+D_{\mathrm{KL}}(P||Q)\ge0
+$$
+입니다.
+
+## 8. 기댓값과 표본평균의 구분
+
+$D_{\mathrm{KL}}(P|Q)$이라는 KL 발산은 확률분포 $P$에 대한 기댓값입니다:
+
+$$
+\mathbb E_P
+\left[
+\log\frac pq
+\right].
+$$
+
+위 값은 두 확률분포 $P$와 $Q$가 정해지면 결정됩니다.
+
+이제 다음과 같은 $n$개의 관측이 있고, 이 관측들이 $P$에서 (독립적으로) 샘플링되었다고 합시다:
+$x_1,\ldots,x_n\overset{\mathrm{iid}}{\sim}P$
+
+또, 모든 $i$에 대해, $(p(x_i),q(x_i))$를 모두 계산할 수 있다고 합시다.
+
+그러면 로그 증거량에 대한 표본평균 $\widehat D_n$을
+$$
+\frac1n\sum_{i=1}^n
+\log\frac{p(x_i)}{q(x_i)}
+$$
+을 계산할 수 있습니다.
+
+$\widehat D_n$은 KL 자체가 아니라 표본에 따라 값이 달라지는 확률변수입니다. 
+
+다만 큰수의 법칙에 따라, 
+$$
+\widehat D_n
+\xrightarrow{\mathrm{a.s.}}
+D_{\mathrm{KL}}(P||Q)
+$$
+
+따라서 $\widehat D_n$은 이론적 KL 발산의 Monte Carlo 추정량으로 사용할 수도 있습니다.
+
+물론 유한한 표본에서 $\widehat D_n$이 KL과 정확히 같지 않으며, 표본에 따라 음수가 될 수도 있습니다.
