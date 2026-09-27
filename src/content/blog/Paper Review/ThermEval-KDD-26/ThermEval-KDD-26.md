@@ -131,7 +131,7 @@ ThermEval-B 벤치마크는 아래 3가지 데이터셋을 활용합니다:
 - [Step 2] 이후 **Prompting**만으로 성능이 좋아질 수 있는지 확인합니다.
     - Standard Zero-Shot Prompt vs. Context-Augmented Prompt
 
-- [Step 3] 최종적으로, **Supervised Fine-Tuning (SFT)**을 하여 성능이 얼마나 더 좋아지는지 확인합니다.
+- [Step 3] 최종적으로, **Supervised Fine-Tuning (SFT)** 을 하여 성능이 얼마나 더 좋아지는지 확인합니다.
     - Qwen-VL-2.5 (7B) 활용
 
 
