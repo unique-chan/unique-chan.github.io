@@ -8,7 +8,7 @@ draft: false # false로 해야 웹 사이트에 표시됨!
 ---
 
 Yechan Kim earned his **Ph.D.** from the School of Electrical Engineering and Computer Science at GIST on August 20, 2026. 
-In recognition of his outstanding research achievements, he was also selected to represent the School and received the **Outstanding Research Award** from the President of GIST.
+In recognition of his outstanding research achievements, he was also selected to represent the GIST EECS and received the **Outstanding Research Award** from the President of GIST.
 
 
 <style>
