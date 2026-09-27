@@ -1,6 +1,6 @@
 ---
 title: "Kullback-Leibler Divergence"
-description: "KLD가 어떻게 등장하게 되었을까?"
+description: "KL 발산"
 publishedAt: 2026-09-01
 tags: ["Machine Learning"]
 language: "ko"
