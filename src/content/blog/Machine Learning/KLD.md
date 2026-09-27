@@ -21,6 +21,7 @@ $$
 위 정의를 보면 다음과 같은 의문이 듭니다:
 - 확률 (정확하게는 가능도)의 비율인 $\frac{p(x)}{q(x)}$가 갖는 의미는?
 - 확률비에 로그 ($\log$)를 씌어 **로그 확률비**로 만든 이유는?
+- 로그 증거량? 기댓값?
 
 위 질문을 중심으로, KL 발산을 더 잘 이해해보시죠.
 
@@ -160,7 +161,7 @@ $$
 
 > 데이터가 실제로 확률모델 $P$에서 생성될 때, 관측 하나가 평균적으로 $P$를 다른 확률모델 $Q$보다 얼마나 더 지지하는가?
 
-단, 여기서 ``평균''은 관측된 표본들의 산술평균이 아닌, $P$에 대한 이론적 기댓값.
+단, 여기서 ``평균''은 관측된 표본들의 산술평균이 아닌, $P$에 대한 이론적 [기댓값](#부록-a-기댓값과-kl-발산).
 
 
 ## 5. KL 발산이 비대칭인 이유?
@@ -255,7 +256,7 @@ $$
 D_{\mathrm{KL}}(P||Q) \ge 0.
 $$
 
-이는 [Jensen 부등식](#부록-jensen-부등식)으로 증명할 수 있습니다. 분포 $P$의 Support를 
+이는 [Jensen 부등식](#부록-b-jensen-부등식과-log-함수)으로 증명할 수 있습니다. 분포 $P$의 Support를 
 $$
 \operatorname{supp}(P)
 =
@@ -446,7 +447,434 @@ $$
 입니다.
 
 
-## [부록] Jensen 부등식과 Log 함수
+## [부록-A] 기댓값과 KL 발산
+
+기댓값 (Expectation 혹은 Expected Value)이란 **확률변수를 여러 번 반복해서 관측했을 때, 평균적으로 어떤 값이 나올지 기대하여 나타내는 값**입니다.
+
+예를 들어 동전을 던져서 앞면이면 1, 뒷면이면 0이라고 하겠습니다. 앞면과 뒷면의 확률이 각각 0.5라면, 동전을 던졌을 때 기댓값은
+
+$$
+\mathbb{E}[X]
+=
+ 0.5 \times 1 + 0.5 \times 0
+=
+0.5
+$$
+
+입니다.
+
+여기서 중요한 점은 기댓값이 실제 한 번의 시행에서 나오는 값일 필요는 없다는 것입니다. 동전 결과는 항상 0 또는 1이지만, 기댓값은 0.5입니다.
+
+아래는 어떤 이산 확률변수가 2 또는 8의 값을 가진다고 할 때, $P(X=8)$이 바뀜에 따라, 기댓값이 어떻게 변화하는지를 보여주는 웹 콘텐츠입니다. 참고로 $P(X=8)$이 어떤 값으로 결정되면, $P(X=2)$도 당연히 결정됩니다 ($1-P(X=8)$). 모든 확률의 합은 1이여야 하니까요. 
+
+<div class="ev-widget">
+<div class="ev-left">
+<div class="formula">\(\mathbb{E}[X]=\sum_x xP(X=x)\)</div>
+<div class="result" id="result">\(\mathbb{E}[X]=2(0.35)+8(0.65)=5.90\)</div>
+
+<div class="control">
+<div class="control-label">Chance of outcome 8,<br>P(X=8)</div>
+<div class="prob" id="prob">0.65</div>
+<input id="slider" type="range" min="0" max="1" step="0.01" value="0.65">
+</div>
+</div>
+
+<div class="ev-right">
+<div class="prob-label left-prob" id="pLeft">P=0.35</div>
+<div class="prob-label right-prob" id="pRight">P=0.65</div>
+
+<div class="beam">
+<div class="weight left-weight" id="leftWeight"></div>
+<div class="weight right-weight" id="rightWeight"></div>
+</div>
+
+<div class="fulcrum"></div>
+
+<div class="expectation-marker" id="marker">
+<div class="marker-label">E[X]</div>
+<div class="marker-line"></div>
+</div>
+
+<div class="axis">
+<div class="tick tick-2"></div>
+<div class="tick tick-8"></div>
+<div class="axis-label label-2">2</div>
+<div class="axis-label label-8">8</div>
+</div>
+</div>
+</div>
+
+<style>
+.ev-widget{
+display:flex;
+width:100%;
+max-width:1040px;
+min-height:360px;
+border:1px solid #d6d6d6;
+border-radius:32px;
+overflow:hidden;
+background:#fff;
+font-family:Arial,sans-serif;
+color:#222;
+box-sizing:border-box;
+}
+
+.ev-widget *{
+box-sizing:border-box;
+}
+
+.ev-left,
+.ev-right{
+position:relative;
+width:50%;
+min-width:0;
+}
+
+.ev-left{
+background:#f5f5f5;
+border-right:1px solid #ddd;
+padding:32px 28px 105px;
+}
+
+.ev-right{
+min-height:360px;
+padding:24px;
+}
+
+.formula{
+margin-top:58px;
+text-align:center;
+font-family:serif;
+font-size:clamp(15px,2.8vw,15px);
+line-height:1.25;
+white-space:nowrap;
+}
+
+.result{
+margin-top:86px;
+text-align:center;
+font-family:serif;
+font-size:clamp(15px,2vw,15px);
+line-height:1.3;
+color:#666;
+white-space:nowrap;
+}
+
+.control{
+position:absolute;
+left:24px;
+right:24px;
+bottom:20px;
+display:grid;
+grid-template-columns:minmax(120px,1fr) auto;
+grid-template-areas:
+"label prob"
+"slider slider";
+align-items:center;
+gap:8px 12px;
+}
+
+.control-label{
+grid-area:label;
+font-size:clamp(12px,1.35vw,16px);
+line-height:1.3;
+overflow-wrap:anywhere;
+}
+
+.prob{
+grid-area:prob;
+font-size:13px;
+white-space:nowrap;
+text-align:right;
+}
+
+.control input[type=range]{
+grid-area:slider;
+width:100%;
+min-width:0;
+margin:0;
+}
+
+.prob-label{
+position:absolute;
+top:76px;
+font-size:clamp(13px,1.4vw,17px);
+color:#666;
+white-space:nowrap;
+}
+
+.left-prob{
+left:22%;
+transform:translateX(-50%);
+}
+
+.right-prob{
+left:78%;
+transform:translateX(-50%);
+}
+
+.beam{
+position:absolute;
+left:20%;
+right:20%;
+top:180px;
+height:4px;
+background:#666;
+}
+
+.weight{
+position:absolute;
+bottom:0;
+width:clamp(22px,3vw,42px);
+border:2px solid #4285f4;
+background:#e9f0ff;
+}
+
+.left-weight{
+left:0;
+transform:translateX(-50%);
+height:24px;
+}
+
+.right-weight{
+right:0;
+transform:translateX(50%);
+height:42px;
+}
+
+.fulcrum{
+position:absolute;
+left:50%;
+top:182px;
+transform:translateX(-50%);
+width:0;
+height:0;
+border-left:20px solid transparent;
+border-right:20px solid transparent;
+border-bottom:44px solid #222;
+}
+
+.fulcrum:after{
+content:"";
+position:absolute;
+left:-17px;
+top:4px;
+width:0;
+height:0;
+border-left:17px solid transparent;
+border-right:17px solid transparent;
+border-bottom:38px solid #fff;
+}
+
+.expectation-marker{
+position:absolute;
+top:238px;
+transform:translateX(-50%);
+text-align:center;
+}
+
+.marker-label{
+font-size:clamp(13px,1.4vw,17px);
+white-space:nowrap;
+}
+
+.marker-line{
+margin:5px auto 0;
+height:52px;
+border-left:1px dashed #555;
+}
+
+.axis{
+position:absolute;
+left:14%;
+right:14%;
+top:298px;
+height:1px;
+background:#ddd;
+}
+
+.tick{
+position:absolute;
+top:-8px;
+width:1px;
+height:16px;
+background:#ccc;
+}
+
+.tick-2{
+left:13%;
+}
+
+.tick-8{
+right:13%;
+}
+
+.axis-label{
+position:absolute;
+top:18px;
+font-size:clamp(13px,1.5vw,17px);
+}
+
+.label-2{
+left:11%;
+}
+
+.label-8{
+right:11%;
+}
+
+@media (max-width:700px){
+.ev-widget{
+flex-direction:column;
+border-radius:24px;
+}
+
+.ev-left,
+.ev-right{
+width:100%;
+}
+
+.ev-left{
+min-height:300px;
+border-right:none;
+border-bottom:1px solid #ddd;
+padding:24px 20px 105px;
+}
+
+.ev-right{
+min-height:340px;
+}
+
+.formula{
+margin-top:24px;
+font-size:clamp(18px,5.5vw,27px);
+}
+
+.result{
+margin-top:58px;
+font-size:clamp(15px,4vw,21px);
+}
+
+.prob-label{
+top:70px;
+}
+
+.beam{
+top:170px;
+}
+
+.fulcrum{
+top:172px;
+}
+
+.expectation-marker{
+top:228px;
+}
+
+.axis{
+top:288px;
+}
+}
+</style>
+
+<script>
+window.MathJax={
+tex:{
+inlineMath:[
+["\\(","\\)"]
+],
+displayMath:[
+["\\[","\\]"]
+]
+}
+};
+</script>
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<script>
+const slider=document.getElementById("slider");
+const prob=document.getElementById("prob");
+const pLeft=document.getElementById("pLeft");
+const pRight=document.getElementById("pRight");
+const result=document.getElementById("result");
+const marker=document.getElementById("marker");
+const leftWeight=document.getElementById("leftWeight");
+const rightWeight=document.getElementById("rightWeight");
+
+function update(){
+const p8=parseFloat(slider.value);
+const p2=1-p8;
+const ex=2*p2+8*p8;
+
+prob.textContent=p8.toFixed(2);
+pLeft.textContent="P="+p2.toFixed(2);
+pRight.textContent="P="+p8.toFixed(2);
+
+result.innerHTML=
+"\\(\\mathbb{E}[X]=2("+p2.toFixed(2)+")+8("+p8.toFixed(2)+")="+ex.toFixed(2)+"\\)";
+
+const minPosition=24;
+const maxPosition=76;
+const ratio=(ex-2)/(8-2);
+marker.style.left=(minPosition+(maxPosition-minPosition)*ratio)+"%";
+
+leftWeight.style.height=(14+44*p2)+"px";
+rightWeight.style.height=(14+44*p8)+"px";
+
+if(window.MathJax&&MathJax.typesetPromise){
+MathJax.typesetPromise([result]);
+}
+}
+
+slider.addEventListener("input",update);
+update();
+</script>
+
+
+조금 더 일반화해서, 이산의 확률변수 $X$가 값 $x$를 확률 $P(X=x)$로 가질 때, $X$의 기댓값은
+
+$$
+\mathbb{E}[X]
+=
+\sum_x \left[ P(X=x) \times x \right]
+$$
+
+입니다. 즉, 각 값에 그 값이 나올 확률을 곱해서 모두 더한 것입니다.
+
+예를 들어 주사위라면
+$$
+X\in\{1,2,3,4,5,6\}
+$$
+이고 각 숫자의 확률이 $ 1/6 $이므로
+
+$$
+\mathbb{E}[X]
+=
+1\frac16+2\frac16+\cdots+6\frac16
+=
+3.5.
+$$
+
+주사위에서 3.5가 직접 나오지는 않지만, 많이 던진 뒤 평균을 내면 대략 3.5에 가까워집니다.
+그래서 기댓값은 흔히 **확률에 따른 가중평균**이라고 생각하면 됩니다.
+
+그리고 바로 이 개념 때문에 앞에서 본 KL 발산도 
+
+$$
+D_{\mathrm{KL}}(P\|Q)
+=
+\mathbb{E}_{x\sim P}
+\left[
+\log\frac{P(x)}{Q(x)}
+\right]
+$$
+
+처럼 기댓값으로 이해할 수 있습니다. KL 발산은 특별한 형태의 함수 ($\log\frac{P(x)}{Q(x)}$)를 $P$ 분포 위에서 평균 낸 값입니다.
+
+
+
+## [부록-B] Jensen 부등식과 Log 함수
 
 젠센 부등식 (Jensen's Inequality)은 
 
