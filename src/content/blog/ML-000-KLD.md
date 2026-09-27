@@ -429,7 +429,7 @@ $$
 \arg\min_\theta
 \left[ - \sum_{i=1}^n
 \log q_\theta(x_i) \right] \\
-& \approx
+& =
 \arg\min_\theta
 D_{\mathrm{KL}}(P || Q_\theta).
 \end{aligned}
