@@ -413,7 +413,7 @@ $$
 \log q_\theta(X_i)
 $$
 
-를 최소화합니다 (사실 $n$은 모델 파라미터와 무관하므로, $\frac1n$을 생략한 $- \sum_{i=1}^n
+를 최소화합니다 (사실 $n$ 역시 모델 파라미터와 무관하므로, $\frac1n$을 생략한 $- \sum_{i=1}^n
 \log q_\theta(X_i)$를 최소화합니다). 그런데 잘 살펴보니, 이것은 사실 Maximum Likelihood Estimation 입니다.
 
 $$

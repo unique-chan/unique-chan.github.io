@@ -33,6 +33,6 @@ img[alt="Yechan Kim Ph.D. Group Photo"] {
 }
 </style>
 
-![Yechan Kim Ph.D. Degree](./Ph.D/Image1.png)
+![Yechan Kim Ph.D. Degree](./Image1.png)
 
-![Yechan Kim Ph.D. Group Photo](./Ph.D/Image2.jpg)
+![Yechan Kim Ph.D. Group Photo](./Image2.jpg)
