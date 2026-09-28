@@ -15,6 +15,7 @@ An English-first research portfolio and Markdown blog built with Astro.
 ```sh
 npm install
 npm run dev
+# 혹은 npm run dev -- --host 0.0.0.0 --port 4321
 ```
 
 Run `npm run build` before publishing. Pushing to `main` deploys the site through GitHub Actions.
