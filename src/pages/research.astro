@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import ResearchFrameMark from "../components/ResearchFrameMark.astro";
+import TelescopeMark from "../components/TelescopeMark.astro";
 import { getCollection } from "astro:content";
 import { formatDateRange } from "../lib/dates";
 
@@ -22,7 +22,7 @@ const statusLabel: Record<string, string> = {
   <h1 class="sr-only">Research Projects</h1>
   <div class="page-shell">
     <div class="page-crest">
-      <ResearchFrameMark />
+      <TelescopeMark />
       <p>Into the unknown</p>
     </div>
   </div>
