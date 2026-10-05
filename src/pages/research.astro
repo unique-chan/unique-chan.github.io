@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import TelescopeMark from "../components/TelescopeMark.astro";
 import { getCollection } from "astro:content";
 import { formatDateRange } from "../lib/dates";
 
@@ -19,11 +20,17 @@ const statusLabel: Record<string, string> = {
 
 <BaseLayout title="Research" description="Projects I'm currently working on.">
   <h1 class="sr-only">Research Projects</h1>
+  <div class="page-shell">
+    <div class="page-crest">
+      <TelescopeMark />
+      <p>Into the unknown</p>
+    </div>
+  </div>
 
   {allProjects.length > 0 ? (
     <Fragment>
       {ongoing.length > 0 && (
-        <section class="page-shell" style="padding-top: 2.5rem;">
+        <section class="page-shell">
           <div class="group-heading">
             <h2>Ongoing</h2>
             <span class="count">{ongoing.length}</span>

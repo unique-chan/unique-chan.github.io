@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import NotebookMark from "../../components/NotebookMark.astro";
 import { getCollection } from "astro:content";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft))
@@ -16,6 +17,16 @@ const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
 
 <BaseLayout title="Blog" description="Research notes, technical writing, and ideas in progress.">
   <h1 class="sr-only">Blog</h1>
+  <div class="page-shell">
+    <div class="page-crest">
+      <NotebookMark />
+      <p>Notes</p>
+    </div>
+    <div class="notes-view-toggle" role="group" aria-label="Switch layout">
+      <button type="button" data-notes-view="grid" aria-pressed="true">Grid</button>
+      <button type="button" data-notes-view="list" aria-pressed="false">List</button>
+    </div>
+  </div>
 
   <section class="page-shell notes-layout">
     <aside class="notes-sidebar">
@@ -39,11 +50,6 @@ const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
     </aside>
 
     <div class="notes-main">
-      <div class="notes-view-toggle" role="group" aria-label="Switch layout">
-        <button type="button" data-notes-view="grid" aria-pressed="true">Grid</button>
-        <button type="button" data-notes-view="list" aria-pressed="false">List</button>
-      </div>
-
       <div class="notes-results view-grid" data-notes-results>
         {posts.map((post) => {
           const formattedDate = post.data.publishedAt.toLocaleDateString("en-US", {

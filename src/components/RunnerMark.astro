@@ -1,0 +1,104 @@
+---
+interface Props { size?: number; }
+const { size = 80 } = Astro.props;
+const gradientId = `runner-gradient-${crypto.randomUUID()}`;
+const frames = 64;
+const cycle = (pose: (phase: number) => string) =>
+  Array.from({ length: frames + 1 }, (_, i) => pose((i % frames) / frames)).join(";");
+const point = (x: number, y: number) => `${x.toFixed(2)} ${y.toFixed(2)}`;
+// One stride: contact, push-off, heel kick, knee drive, then landing.
+// Interpolate joint angles, preserving limb lengths throughout the stride.
+const legPoses = [[25, 30], [-5, 15], [-35, 20], [-40, 95], [0, 135], [50, 130], [70, 90], [50, 45]];
+const jointAngle = (phase: number, joint: number) => {
+  const position = phase * legPoses.length;
+  const index = Math.floor(position);
+  const t = position - index;
+  const at = (offset: number) => legPoses[(index + offset + legPoses.length) % legPoses.length][joint];
+  const a = at(-1), b = at(0), c = at(1), d = at(2);
+  return .5 * (2 * b + (-a + c) * t + (2 * a - 5 * b + 4 * c - d) * t * t + (-a + 3 * b - 3 * c + d) * t * t * t) * Math.PI / 180;
+};
+const leg = (phase: number) => {
+  const thigh = jointAngle(phase, 0);
+  const shin = thigh - jointAngle(phase, 1);
+  const kneeX = 38 + 14 * Math.sin(thigh);
+  const kneeY = 44 + 14 * Math.cos(thigh);
+  const x = kneeX + 14 * Math.sin(shin);
+  const y = kneeY + 14 * Math.cos(shin);
+  return `M38 44 L${point(kneeX, kneeY)} L${point(x, y)} l4 0`;
+};
+const arm = (phase: number) => {
+  const angle = -Math.cos(phase * 2 * Math.PI - Math.PI / 4) * .95;
+  const elbowX = 43 + 12 * Math.sin(angle);
+  const elbowY = 29 + 12 * Math.cos(angle);
+  const forearm = angle + 1.8;
+  return `M43 29 L${point(elbowX, elbowY)} L${point(elbowX + 11 * Math.sin(forearm), elbowY + 11 * Math.cos(forearm))}`;
+};
+const limbs = [
+  { className: "runner-arm-back", pose: (t: number) => arm(t + .5) },
+  { className: "runner-leg-back", pose: (t: number) => leg((t + .5) % 1) },
+  { className: "runner-arm-front", pose: arm },
+  { className: "runner-leg-front", pose: leg },
+];
+---
+
+<svg class="runner-mark" width={size} height={size} viewBox="0 0 80 80" aria-hidden="true">
+  <defs>
+    <linearGradient id={gradientId} gradientUnits="userSpaceOnUse" x1="15" y1="70" x2="60" y2="10">
+      <stop class="runner-color-start" offset="0%" />
+      <stop class="runner-color-mid" offset="50%" />
+      <stop class="runner-color-end" offset="100%" />
+    </linearGradient>
+  </defs>
+  <g class="runner-trails" fill="none" stroke={`url(#${gradientId})`} stroke-width="2.5" stroke-linecap="round">
+    <path d="M9 29h12" />
+    <path d="M5 39h13" />
+    <path d="M10 49h9" />
+  </g>
+  <g class="runner-body" fill="none" stroke={`url(#${gradientId})`} stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    {limbs.slice(0, 2).map(({ className, pose }) => (
+      <path class={className} d={pose(0)}>
+        <animate attributeName="d" values={cycle(pose)} dur=".68s" repeatCount="indefinite" />
+      </path>
+    ))}
+    <path d="M45 24 38 44" stroke-width="7" />
+    <circle cx="49" cy="17" r="6" fill={`url(#${gradientId})`} stroke="none" />
+    {limbs.slice(2).map(({ className, pose }) => (
+      <path class={className} d={pose(0)}>
+        <animate attributeName="d" values={cycle(pose)} dur=".68s" repeatCount="indefinite" />
+      </path>
+    ))}
+  </g>
+</svg>
+
+<style>
+  .runner-mark { display: block; overflow: visible; }
+  .runner-body { animation: runner-lift .34s ease-in-out infinite; }
+  .runner-color-start { stop-color: var(--leaf-3); animation: runner-color-start 4s ease-in-out infinite; }
+  .runner-color-mid { stop-color: var(--leaf-1); animation: runner-color-mid 4s ease-in-out infinite; }
+  .runner-color-end { stop-color: var(--leaf-4); animation: runner-color-end 4s ease-in-out infinite; }
+  .runner-arm-back, .runner-leg-back { opacity: .65; }
+  .runner-trails path { animation: runner-trail .96s ease-out infinite; }
+  .runner-trails path:nth-child(2) { animation-delay: -.32s; }
+  .runner-trails path:nth-child(3) { animation-delay: -.64s; }
+  @keyframes runner-trail { from { transform: translateX(3px); opacity: .6; } to { transform: translateX(-5px); opacity: 0; } }
+  @keyframes runner-lift { 0%, 100% { transform: translateY(1px); } 50% { transform: translateY(-1px); } }
+  @keyframes runner-color-start { 50% { stop-color: var(--leaf-2); } }
+  @keyframes runner-color-mid { 50% { stop-color: var(--leaf-3); } }
+  @keyframes runner-color-end { 50% { stop-color: var(--leaf-1); } }
+  @media (prefers-reduced-motion: reduce) {
+    .runner-body { animation-duration: .68s; }
+    .runner-trails path { animation-duration: 1.44s; }
+    .runner-color-start, .runner-color-mid, .runner-color-end { animation-duration: 6s; }
+  }
+</style>
+
+<script>
+  const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const updateMotion = () => {
+    document.querySelectorAll(".runner-mark animate").forEach((animation) => {
+      animation.setAttribute("dur", motion.matches ? "1.36s" : ".68s");
+    });
+  };
+  updateMotion();
+  motion.addEventListener("change", updateMotion);
+</script>

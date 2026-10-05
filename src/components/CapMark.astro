@@ -1,0 +1,42 @@
+---
+interface Props { size?: number; }
+const { size = 80 } = Astro.props;
+const expand = (runs: number[][]) => runs.flatMap(([row, first, last]) =>
+  Array.from({ length: last - first + 1 }, (_, i) => ({ col: first + i, row }))
+);
+const crown = expand([[1, 5, 6], [2, 3, 8], [3, 1, 10], [4, 0, 11], [5, 2, 9], [6, 4, 7]]);
+const band = expand([[7, 3, 8], [8, 3, 8], [9, 4, 7]]);
+const tassel = expand([[5, 10, 10], [6, 10, 10], [7, 10, 10], [8, 10, 10], [9, 9, 10], [10, 9, 10]]);
+const timing = (col: number, row: number) =>
+  `--arrival:${(row * .045 + ((col * 7 + row * 3) % 7) * .018).toFixed(3)}s`;
+---
+
+<svg class="cap-mark" width={size} height={size} viewBox="0 0 48 48" aria-hidden="true">
+  {band.map(({ col, row }) => <rect class="cap-band" style={timing(col, row)} x={col * 4 + .35} y={row * 4 + .35} width="3.3" height="3.3" rx=".5" />)}
+  {crown.map(({ col, row }) => <rect class={`cap-crown${row < 4 ? ' is-lit' : ''}`} style={timing(col, row)} x={col * 4 + .35} y={row * 4 + .35} width="3.3" height="3.3" rx=".5" />)}
+  <g class="cap-tassel">
+    {tassel.map(({ col, row }) => <rect style={timing(col, row)} x={col * 4 + .35} y={row * 4 + .35} width="3.3" height="3.3" rx=".5" />)}
+  </g>
+</svg>
+
+<style>
+  .cap-mark { display: block; overflow: visible; }
+  .cap-mark rect {
+    transform-box: fill-box;
+    animation: cap-drop .55s cubic-bezier(.3, 1.5, .55, 1) var(--arrival) both;
+  }
+  .cap-crown { fill: var(--leaf-3); }
+  .cap-crown.is-lit { fill: var(--leaf-1); }
+  .cap-band { fill: var(--leaf-3); }
+  .cap-tassel { transform-origin: 42px 20px; animation: tassel-sway 2.8s ease-in-out infinite; }
+  .cap-tassel rect { fill: var(--leaf-4); }
+  @keyframes cap-drop {
+    from { transform: translateY(-260%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes tassel-sway { 0%, 100% { transform: rotate(-7deg); } 50% { transform: rotate(7deg); } }
+  @media (prefers-reduced-motion: reduce) {
+    .cap-tassel { animation-name: tassel-sway-calm; animation-duration: 4s; }
+  }
+  @keyframes tassel-sway-calm { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+</style>

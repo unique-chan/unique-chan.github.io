@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PublicationCard from "../components/PublicationCard.astro";
+import PaperMark from "../components/PaperMark.astro";
 import PatentCard from "../components/PatentCard.astro";
 import { publications } from "../data/publications";
 import { patents } from "../data/patents";
@@ -45,6 +46,10 @@ const types = [
 <BaseLayout title="Publications" description="Peer-reviewed papers, preprints, and research artifacts.">
   <h1 class="sr-only">Publications</h1>
   <section class="page-shell">
+    <div class="page-crest">
+      <PaperMark size={80} />
+      <p>From curiosity to contribution</p>
+    </div>
     <div class="publication-filters" aria-label="Filter publications by type">
       {types.map((type, index) =>
         type === "Korean" ? (
@@ -94,12 +99,11 @@ const types = [
             data-all-types={type === "All" ? allTypes.join(",") : undefined}
             aria-pressed={index === 0 ? "true" : "false"}
           >
-            {type === "All" ? `All (${allTypes.map((t) => t[0]).join("+")})` : type}
+            {type}
           </button>
         )
       )}
     </div>
-    <p class="publication-legend">✝ denotes a corresponding author</p>
     {years.map((year) => (
       <div class="year-group" data-year-group>
         <h2>{year}</h2>
@@ -117,6 +121,7 @@ const types = [
         </div>
       </div>
     ))}
+    <p class="publication-legend">✝ denotes a corresponding author</p>
   </section>
   <script>
     const topFilterButtons = document.querySelectorAll<HTMLButtonElement>(".filter-top");
@@ -174,3 +179,8 @@ const types = [
     topFilterButtons[0]?.click();
   </script>
 </BaseLayout>
+
+<style>
+  .page-crest + .publication-filters { padding-top: 0; justify-content: center; }
+  .publication-legend { text-align: center; margin: 0 0 3rem; }
+</style>

@@ -1,11 +1,18 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SocialIcons from "../components/SocialIcons.astro";
+import RunnerMark from "../components/RunnerMark.astro";
 import { site } from "../config";
 ---
 
 <BaseLayout title="CV" description={`Curriculum vitae of ${site.fullName}.`}>
   <h1 class="sr-only">{site.fullName} — Curriculum vitae</h1>
+  <div class="page-shell">
+    <div class="page-crest">
+      <RunnerMark />
+      <p>Curriculum Vitae</p>
+    </div>
+  </div>
   <section class="page-shell cv-grid">
     <aside>
       <div class="cv-affiliation">
@@ -129,3 +136,7 @@ import { site } from "../config";
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .cv-grid { padding-top: 0; }
+</style>

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import TreeMark from "../components/TreeMark.astro";
+import LineageMark from "../components/LineageMark.astro";
 import { genealogy, genealogyMeta, MGP_BASE } from "../data/genealogy";
 
 const { generations, span, origin } = genealogyMeta;
@@ -13,8 +14,8 @@ const pad = (n: number) => String(n).padStart(2, "0");
   <h1 class="sr-only">Academic Genealogy</h1>
 
   <section class="page-shell gen-wrap">
-    <div class="gen-crest">
-      <TreeMark size={160} class="gen-crest-mark" />
+    <div class="page-crest">
+      <LineageMark />
       <p>From Wolfgang Fabricius Capito to Yechan Kim</p>
     </div>
 

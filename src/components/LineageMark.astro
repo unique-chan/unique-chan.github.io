@@ -1,0 +1,107 @@
+---
+interface Props { size?: number; }
+const { size = 80 } = Astro.props;
+const id = `lineage-${crypto.randomUUID()}`;
+const ratio = .72;
+const route = [-1, 1, -1, 1, -1, 1];
+const nodes: { x: number; y: number; scale: number; continues: boolean }[] = [];
+let generation = { x: 40, y: 18, scale: 1 };
+// Follow one lineage; siblings are visible without spawning extra subtrees.
+// This keeps the next generation readable throughout the camera transition.
+route.forEach((direction) => {
+  nodes.push({ ...generation, continues: true });
+  nodes.push({
+    x: generation.x - direction * 19 * generation.scale,
+    y: generation.y + 42 * generation.scale,
+    scale: generation.scale * ratio,
+    continues: false,
+  });
+  generation = {
+    x: generation.x + direction * 19 * generation.scale,
+    y: generation.y + 42 * generation.scale,
+    scale: generation.scale * ratio,
+  };
+});
+nodes.push({ ...generation, continues: false });
+// Each chosen student is the same physical node throughout the zoom.
+// Self-similar generations make the final frame match the first frame.
+let focus = { x: 40, y: 18, scale: 1 };
+const views = route.slice(0, 4).map((direction) => {
+  focus = {
+    x: focus.x + direction * 19 * focus.scale,
+    y: focus.y + 42 * focus.scale,
+    scale: focus.scale * ratio,
+  };
+  const zoom = 1 / focus.scale;
+  return `translate(${40 - focus.x * zoom}px, ${18 - focus.y * zoom}px) scale(${zoom})`;
+});
+const cameraStyle = views.map((view, i) => `--view-${i + 1}:${view}`).join(";");
+const branches = ["M0 10v6a5 5 0 0 1-5 5h-9a5 5 0 0 0-5 5v8.8", "M0 10v6a5 5 0 0 0 5 5h9a5 5 0 0 1 5 5v8.8"];
+---
+
+<svg class="lineage-mark" style={cameraStyle} width={size} height={size} viewBox="0 0 80 80" aria-hidden="true">
+  <defs>
+    <clipPath id={`${id}-clip`}><rect width="80" height="80" rx="5" /></clipPath>
+    <linearGradient id={`${id}-color`} gradientUnits="userSpaceOnUse" x1="-10" y1="10" x2="10" y2="-10">
+      <stop class="lineage-color-start" offset="0%" />
+      <stop class="lineage-color-mid" offset="50%" />
+      <stop class="lineage-color-end" offset="100%" />
+    </linearGradient>
+  </defs>
+  <g clip-path={`url(#${id}-clip)`}>
+    <g class="lineage-camera" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M40-20V8" stroke="var(--leaf-3)" stroke-width="1.8" />
+      {nodes.map(({ x, y, scale, continues }) => (
+        <g transform={`translate(${x} ${y}) scale(${scale})`}>
+          {continues && branches.map((d) => (
+            <Fragment>
+              <path d={d} stroke="var(--leaf-3)" stroke-width="1.8" opacity=".6" />
+              <path class="lineage-flow lineage-flow-glow" d={d} pathLength="1" stroke="var(--accent)" stroke-width="6" />
+              <path class="lineage-flow" d={d} pathLength="1" stroke="var(--accent)" stroke-width="3.4" />
+              <path class="lineage-flow" d={d} pathLength="1" stroke="var(--accent-bridge)" stroke-width="1.2" />
+            </Fragment>
+          ))}
+          <g stroke={`url(#${id}-color)`}>
+            <circle cx="0" cy="0" r="10" fill="var(--bg)" stroke-width="2" />
+            <circle cx="0" cy="-3" r="2.7" stroke-width="1.6" />
+            <path d="M-5 5.5c.6-6.5 9.4-6.5 10 0" stroke-width="1.6" />
+          </g>
+        </g>
+      ))}
+    </g>
+  </g>
+</svg>
+
+<style>
+  .lineage-mark { --lineage-cycle: 4.8s; --lineage-flow-cycle: 1.2s; display: block; }
+  .lineage-camera {
+    transform-box: view-box;
+    transform-origin: 0 0;
+    animation: lineage-morph var(--lineage-cycle) cubic-bezier(.65, 0, .25, 1) infinite;
+  }
+  .lineage-flow { --flow-alpha: 1; stroke-dasharray: .22 1; animation: lineage-flow var(--lineage-flow-cycle) linear infinite; }
+  .lineage-flow-glow { --flow-alpha: .24; }
+  .lineage-color-start { stop-color: var(--leaf-3); animation: lineage-color-start 4s ease-in-out infinite; }
+  .lineage-color-mid { stop-color: var(--leaf-1); animation: lineage-color-mid 4s ease-in-out infinite; }
+  .lineage-color-end { stop-color: var(--leaf-4); animation: lineage-color-end 4s ease-in-out infinite; }
+  @keyframes lineage-morph {
+    0%, 12% { transform: translate(0, 0) scale(1); }
+    25%, 37% { transform: var(--view-1); }
+    50%, 62% { transform: var(--view-2); }
+    75%, 87% { transform: var(--view-3); }
+    100% { transform: var(--view-4); }
+  }
+  @keyframes lineage-flow {
+    0% { stroke-dashoffset: .22; opacity: 0; }
+    6% { opacity: var(--flow-alpha); }
+    88% { stroke-dashoffset: -1; opacity: var(--flow-alpha); }
+    100% { stroke-dashoffset: -1; opacity: 0; }
+  }
+  @keyframes lineage-color-start { 50% { stop-color: var(--leaf-2); } }
+  @keyframes lineage-color-mid { 50% { stop-color: var(--leaf-3); } }
+  @keyframes lineage-color-end { 50% { stop-color: var(--leaf-1); } }
+  @media (prefers-reduced-motion: reduce) {
+    .lineage-mark { --lineage-cycle: 8s; --lineage-flow-cycle: 2s; }
+    .lineage-color-start, .lineage-color-mid, .lineage-color-end { animation-duration: 8s; }
+  }
+</style>

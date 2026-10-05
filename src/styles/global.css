@@ -425,13 +425,10 @@ button { font: inherit; }
 .notes-filters button span:last-child { font: .72rem "DM Mono"; color: inherit; }
 .notes-filters button[aria-pressed="true"] { color: var(--accent); font-weight: 600; border-bottom: 2px solid var(--accent); }
 
-.notes-view-toggle { display: flex; gap: .5rem; margin-bottom: 1.5rem; }
+.notes-view-toggle { display: flex; flex-wrap: wrap; justify-content: center; gap: .65rem; }
 .notes-view-toggle button {
-  padding: .5rem 1rem; border: 1px solid var(--line); border-radius: 99px; background: transparent; color: var(--muted);
-  font: 500 .72rem "DM Mono"; text-transform: uppercase; letter-spacing: .04em; cursor: pointer;
   transition: border-color .15s ease, color .15s ease, background .15s ease;
 }
-.notes-view-toggle button[aria-pressed="true"] { border-color: var(--ink); color: var(--ink); background: var(--surface); }
 
 .note-card[hidden] { display: none !important; }
 .note-body h3 { margin: 0; font: 500 1.3rem/1.25 "Manrope", sans-serif; letter-spacing: -.02em; }
@@ -578,14 +575,14 @@ button { font: inherit; }
   display: flex; flex-wrap: wrap; align-items: flex-start; gap: .65rem;
   padding: 3rem 0 0;
 }
-.publication-filters button {
+.publication-filters button, .notes-view-toggle button {
   padding: .65rem .9rem; border: 1px solid var(--line); border-radius: 99px;
   background: transparent; color: var(--muted); cursor: pointer;
   font: 500 .72rem/1 "DM Mono"; text-transform: uppercase; letter-spacing: .04em;
 }
-.publication-filters button::first-letter { text-decoration: underline; }
-.publication-filters button:hover { border-color: var(--ink); color: var(--ink); }
-.publication-filters button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: #fff; }
+.publication-filters button::first-letter, .notes-view-toggle button::first-letter { text-decoration: underline; }
+.publication-filters button:hover, .notes-view-toggle button:hover { border-color: var(--ink); color: var(--ink); }
+.publication-filters button[aria-pressed="true"], .notes-view-toggle button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: #fff; }
 .publication-legend {
   margin: 1.1rem 0 0; color: var(--muted);
   font: 500 .68rem/1 "DM Mono"; letter-spacing: .06em;
@@ -798,15 +795,17 @@ button { font: inherit; }
 }
 @keyframes leaf-spin { to { transform: rotate(var(--turn)); } }
 
-.gen-wrap { padding: clamp(2.5rem, 4vw, 3.5rem) 0 7rem; }
+.gen-wrap { padding: 0 0 7rem; }
 
 .tree-mark { display: block; flex: none; color: var(--muted); }
-/* the pixel tree lost its title block, so it now opens the page on its own */
-.gen-crest {
-  display: grid; justify-items: center; gap: 1.1rem;
-  margin-bottom: clamp(2.5rem, 4vw, 3.5rem);
+/* Matching compact headers for Genealogy, Publications and CV. */
+.page-crest {
+  display: grid; justify-items: center; gap: .55rem;
+  padding-top: clamp(1.25rem, 2vw, 1.75rem);
+  margin-bottom: clamp(1.25rem, 2vw, 1.75rem);
 }
-.gen-crest p {
+.page-crest > svg { width: 80px; height: 80px; }
+.page-crest p {
   margin: 0; color: var(--muted); text-align: center;
   font: 500 .72rem/1.5 "DM Mono"; text-transform: uppercase; letter-spacing: .12em;
 }
@@ -938,7 +937,8 @@ button { font: inherit; }
 @media (max-width: 860px) {
   .gen-stats { grid-template-columns: 1fr; }
   .gen-tree { --spine: 15px; max-width: none; }
-  .gen-crest-mark { width: 104px; height: 104px; }
+  .page-crest > svg { width: 52px; height: 52px; }
+  .page-crest p { min-height: 2.16rem; display: grid; align-content: center; }
 
   /* every connector collapses to one rail segment on the left */
   .gen-link, .gen-link.is-split, .gen-link.is-merge, .gen-link.is-bridge { height: 22px; }
