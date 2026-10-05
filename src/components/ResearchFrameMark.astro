@@ -1,0 +1,73 @@
+---
+interface Props { size?: number; }
+const { size = 80 } = Astro.props;
+const id = `research-frame-${crypto.randomUUID()}`;
+const inset = "translate(50 48) scale(.46) translate(-40 -40)";
+const cameraStyle = Array.from({ length: 11 }, (_, i) => {
+  const p = i / 10;
+  const t = p * p * (3 - 2 * p);
+  const zoom = Math.pow(1 / .46, t);
+  return `--camera-${i}:matrix(${zoom},0,0,${zoom},${50 - 10 * t - zoom * 50},${48 - 8 * t - zoom * 48})`;
+}).join(";");
+---
+
+<svg class="research-frame-mark" width={size} height={size} viewBox="0 0 80 80" aria-hidden="true">
+  <defs>
+    <clipPath id={`${id}-clip`}><rect width="80" height="80" rx="5" /></clipPath>
+    <linearGradient id={`${id}-gradient`} gradientUnits="userSpaceOnUse" x1="12" y1="68" x2="66" y2="12">
+      <stop class="frame-color-start" offset="0%" />
+      <stop class="frame-color-mid" offset="50%" />
+      <stop class="frame-color-end" offset="100%" />
+    </linearGradient>
+    <symbol id={`${id}-scene`} viewBox="0 0 80 80" overflow="visible">
+      <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="8" y="9" width="64" height="62" rx="4" fill="var(--bg)" />
+        <path d="M12 10h56a3 3 0 0 1 3 3v10H9V13a3 3 0 0 1 3-3Z" fill="var(--surface)" />
+        <rect x="8" y="9" width="64" height="62" rx="4" stroke={`url(#${id}-gradient)`} stroke-width="2.2" />
+        <path d="M8 23h64" stroke={`url(#${id}-gradient)`} stroke-width="1.2" />
+        <circle cx="15" cy="16" r="1.6" fill="#ff5f57" />
+        <circle cx="21" cy="16" r="1.6" fill="#febc2e" />
+        <circle cx="27" cy="16" r="1.6" fill="#28c840" />
+        <path d="M38 16h16" stroke={`url(#${id}-gradient)`} stroke-width="1.4" opacity=".65" />
+        <path d="M15 33h11m-11 7h8m-8 7h11m-11 15h8" stroke={`url(#${id}-gradient)`} stroke-width="1.5" opacity=".55" />
+      </g>
+    </symbol>
+  </defs>
+  <g clip-path={`url(#${id}-clip)`}>
+    <g class="frame-camera" style={cameraStyle}>
+      {[0, 1, 2, 3, 4].map((depth) => (
+        <g transform={depth === 0 ? undefined : Array(depth).fill(inset).join(" ")}>
+          <use href={`#${id}-scene`} width="80" height="80" />
+        </g>
+      ))}
+    </g>
+  </g>
+</svg>
+
+<style>
+  .research-frame-mark { --frame-cycle: 2.8s; display: block; }
+  .frame-camera { transform-box: view-box; transform-origin: 0 0; animation: frame-recurse var(--frame-cycle) linear infinite; }
+  .frame-color-start { stop-color: var(--leaf-3); animation: frame-color-start 4s ease-in-out infinite; }
+  .frame-color-mid { stop-color: var(--leaf-1); animation: frame-color-mid 4s ease-in-out infinite; }
+  .frame-color-end { stop-color: var(--leaf-4); animation: frame-color-end 4s ease-in-out infinite; }
+  @keyframes frame-recurse {
+    0%, 8% { transform: var(--camera-0); }
+    17.2% { transform: var(--camera-1); }
+    26.4% { transform: var(--camera-2); }
+    35.6% { transform: var(--camera-3); }
+    44.8% { transform: var(--camera-4); }
+    54% { transform: var(--camera-5); }
+    63.2% { transform: var(--camera-6); }
+    72.4% { transform: var(--camera-7); }
+    81.6% { transform: var(--camera-8); }
+    90.8% { transform: var(--camera-9); }
+    100% { transform: var(--camera-10); }
+  }
+  @keyframes frame-color-start { 50% { stop-color: var(--leaf-2); } }
+  @keyframes frame-color-mid { 50% { stop-color: var(--leaf-3); } }
+  @keyframes frame-color-end { 50% { stop-color: var(--leaf-1); } }
+  @media (prefers-reduced-motion: reduce) {
+    .research-frame-mark { --frame-cycle: 4s; }
+    .frame-color-start, .frame-color-mid, .frame-color-end { animation-duration: 6s; }
+  }
+</style>
