@@ -1,5 +1,5 @@
 ---
-title: "Yechan Kim Awarded Ph.D. and Outstanding Research Award at GIST EECS"
+title: "Yechan Kim Awarded Ph.D. and Outstanding Research Award at GIST"
 description: "Congrat! 🎉"
 publishedAt: 2026-08-20
 tags: ["News"]
