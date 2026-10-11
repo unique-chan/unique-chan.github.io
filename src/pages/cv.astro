@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SocialIcons from "../components/SocialIcons.astro";
 import RunnerMark from "../components/RunnerMark.astro";
+import MagicPortrait from "../components/MagicPortrait.astro";
 import { site } from "../config";
 ---
 
@@ -25,13 +26,16 @@ import { site } from "../config";
       <SocialIcons />
     </aside>
     <div class="cv-main">
-      <section>
+      <section class="cv-biography">
+        <div class="cv-biography-copy">
         <h2>Biography</h2>
         <p><strong>Yechan Kim</strong> (Member, IEEE/ACM/AAAI) 
         received the Ph.D. degree from the School of Electrical Engineering and Computer Science, Gwangju Institute of Science and Technology (GIST), Gwangju, Korea, in 2026.
         He then joined LIG Defense&Aerospace (LIG D&A), Seongnam, Korea, where he is currently a Research Engineer in the AI R&D Team at the AI Laboratory. 
         His current research interests include artificial intelligence, computer vision, and multimodal learning, with applications to surveillance and reconnaissance.
         </p>
+        </div>
+        <MagicPortrait />
       </section>
       <section>
         <h2>Research interests</h2>
@@ -147,4 +151,14 @@ import { site } from "../config";
 
 <style>
   .cv-grid { padding-top: 0; }
+  .cv-main { min-width: 0; }
+  .cv-biography { display: grid; grid-template-columns: minmax(0, 1fr) 180px; gap: 2rem; align-items: start; }
+  .cv-biography-copy p { margin-bottom: 0; }
+  @media (min-width: 761px) and (max-width: 1050px) {
+    .cv-grid { gap: 2rem; grid-template-columns: 1fr 3.5fr; }
+    .cv-biography { grid-template-columns: minmax(0, 1fr) 160px; gap: 1.5rem; }
+  }
+  @media (max-width: 600px) {
+    .cv-biography { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+  }
 </style>

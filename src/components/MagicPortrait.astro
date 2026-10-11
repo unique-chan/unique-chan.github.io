@@ -1,0 +1,132 @@
+---
+import { Image } from "astro:assets";
+import portrait from "../../Bio.jpg";
+const sparks = [
+  [12, 18, -0.4], [84, 14, -1.8], [92, 48, -2.7],
+  [18, 78, -1.1], [76, 88, -3.2], [6, 52, -2.2],
+];
+const shards = [
+  "52,46 0,0 62,0", "52,46 62,0 100,0", "52,46 100,0 100,38",
+  "52,46 100,38 100,100", "52,46 100,100 42,100", "52,46 42,100 0,100",
+  "52,46 0,100 0,32", "52,46 0,32 0,0",
+];
+---
+
+<figure class="magic-portrait" data-magic-portrait>
+  <div class="portrait-frame">
+    <span class="frame-corner top-left" aria-hidden="true">✧</span>
+    <span class="frame-corner top-right" aria-hidden="true">✧</span>
+    <span class="frame-corner bottom-left" aria-hidden="true">✧</span>
+    <span class="frame-corner bottom-right" aria-hidden="true">✧</span>
+    <div class="portrait-window">
+      <Image src={portrait} alt="Portrait of Yechan Kim" width={180} widths={[180, 360, 540]} sizes="180px" loading="eager" class="portrait-photo" />
+      <span class="portrait-glass" aria-hidden="true"></span>
+      <span class="portrait-sparks" aria-hidden="true">
+        {sparks.map(([x, y, delay]) => <span class="spark" style={`left:${x}%;top:${y}%;--delay:${delay}s;`}></span>)}
+      </span>
+    </div>
+    <div class="broken-glass" aria-hidden="true">
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+        <g class="glass-shards">
+          {shards.map((points, index) => <polygon points={points} style={`--shard-x:${(index - 3.5) * 13}px;--shard-turn:${(index % 2 ? 1 : -1) * (18 + index * 7)}deg;--shard-delay:${.18 + index * .025}s;`} />)}
+        </g>
+        <path class="glass-cracks" d="M52 46L0 0M52 46L62 0M52 46L100 0M52 46L100 38M52 46L100 100M52 46L42 100M52 46L0 100M52 46L0 32M26 23L34 14L32 0M76 69L86 66L100 74M26 73L15 70L0 78M57 23L72 18L77 0" />
+      </svg>
+    </div>
+  </div>
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-magic-portrait]").forEach((portrait) => {
+    const frame = portrait.querySelector<HTMLElement>(".portrait-frame");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let breakTimer: ReturnType<typeof setTimeout> | undefined;
+    const resetTilt = () => {
+      frame?.style.setProperty("--tilt-x", "0deg");
+      frame?.style.setProperty("--tilt-y", "0deg");
+    };
+    const resetGlass = () => {
+      clearTimeout(breakTimer);
+      breakTimer = undefined;
+      delete portrait.dataset.shattered;
+      resetTilt();
+    };
+    frame?.addEventListener("pointerenter", (event) => {
+      if (event.pointerType === "touch") return;
+      clearTimeout(breakTimer);
+      breakTimer = setTimeout(() => {
+        portrait.dataset.shattered = "true";
+        resetTilt();
+      }, 3000);
+    });
+    frame?.addEventListener("pointermove", (event) => {
+      if (!frame || event.pointerType === "touch" || reducedMotion.matches || portrait.dataset.shattered === "true") return;
+      const bounds = frame.getBoundingClientRect();
+      frame.style.setProperty("--tilt-x", `${-(event.clientY - bounds.top - bounds.height / 2) / bounds.height * 7}deg`);
+      frame.style.setProperty("--tilt-y", `${(event.clientX - bounds.left - bounds.width / 2) / bounds.width * 7}deg`);
+    });
+    frame?.addEventListener("pointerleave", resetGlass);
+    frame?.addEventListener("pointercancel", resetGlass);
+    window.addEventListener("blur", resetGlass);
+    document.addEventListener("visibilitychange", () => { if (document.hidden) resetGlass(); });
+    reducedMotion.addEventListener("change", resetTilt);
+  });
+</script>
+
+<style>
+  .magic-portrait { width: 180px; max-width: 100%; margin: 0; justify-self: end; perspective: 900px; }
+  .portrait-frame {
+    position: relative; padding: 12px; border: 1px solid #725329; border-radius: 5px;
+    background: linear-gradient(135deg, #e3ca8b, #94703d 22%, #5e4328 48%, #c6a363 72%, #ebd49a);
+    box-shadow: inset 0 0 0 3px #b8985c, inset 0 0 0 5px #624628, inset 0 0 0 7px #d4b779,
+      0 16px 30px -15px #30231680, 0 2px 4px #30231630;
+    transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transition: transform .35s ease;
+  }
+  .frame-corner { position: absolute; z-index: 3; color: #f2d99d; font: 19px/1 Georgia, serif; text-shadow: 0 1px 2px #352415; }
+  .top-left { top: -2px; left: -2px; } .top-right { top: -2px; right: -2px; }
+  .bottom-left { bottom: -2px; left: -2px; } .bottom-right { bottom: -2px; right: -2px; }
+  .portrait-window { position: relative; overflow: hidden; aspect-ratio: 5392 / 6932; background: #ede5d6; box-shadow: 0 0 0 1px #382918, 0 0 0 3px #e0c48b; }
+  .portrait-photo { position: relative; z-index: 1; display: block; width: 100%; height: 100%; object-fit: cover; filter: sepia(.14) saturate(.84); transform: scale(1.045); animation: portrait-breathe 6s ease-in-out infinite; }
+  .portrait-glass {
+    position: absolute; z-index: 2; inset: 0; pointer-events: none;
+    background: linear-gradient(135deg, #fff8e51a, transparent 45%), radial-gradient(ellipse at center, transparent 40%, #3c291e38);
+    box-shadow: inset 0 0 8px #fff1c52b;
+  }
+  .portrait-frame::after {
+    content: ""; position: absolute; inset: 3px; border: 1px solid #ffe2a0; border-radius: 2px;
+    pointer-events: none; opacity: .2; box-shadow: 0 0 6px #e8bd6340;
+    animation: frame-glimmer 3.8s ease-in-out -1.1s infinite;
+  }
+  .portrait-sparks { position: absolute; z-index: 3; inset: 0; pointer-events: none; }
+  .spark { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #fff9dc; box-shadow: 0 0 5px 2px #f4cb7c; animation: portrait-sparkle 3.4s ease-in-out var(--delay) infinite; }
+  .spark::before, .spark::after { content: ""; position: absolute; top: 50%; left: 50%; background: linear-gradient(90deg, transparent, #fff9d9, transparent); transform: translate(-50%, -50%); }
+  .spark::before { width: 13px; height: 1px; }
+  .spark::after { width: 1px; height: 13px; background: linear-gradient(transparent, #fff9d9, transparent); }
+  .broken-glass { position: absolute; z-index: 5; inset: 12px; pointer-events: none; opacity: 0; }
+  .broken-glass svg { display: block; width: 100%; height: 100%; overflow: visible; }
+  .glass-shards polygon { fill: #c5e8fa35; stroke: #ffffffc9; stroke-width: .45; vector-effect: non-scaling-stroke; transform-box: fill-box; transform-origin: center; }
+  .glass-cracks { fill: none; stroke: #fff; stroke-width: .8; vector-effect: non-scaling-stroke; filter: drop-shadow(0 0 1px #203c52); }
+  [data-shattered="true"] .broken-glass { opacity: 1; }
+  [data-shattered="true"] .glass-cracks { animation: glass-crack .65s ease-out both; }
+  [data-shattered="true"] .glass-shards polygon { animation: glass-fall 1.25s cubic-bezier(.35, 0, .85, .55) var(--shard-delay) both; }
+  [data-shattered="true"] .portrait-glass, [data-shattered="true"] .portrait-sparks { opacity: 0; transition: opacity .25s .2s; }
+  @keyframes portrait-breathe { 0%, 100% { transform: scale(1.045) translate(-.4%, .3%) rotate(-.3deg); } 50% { transform: scale(1.075) translate(.4%, -.3%) rotate(.3deg); } }
+  @keyframes frame-glimmer { 0%, 18%, 80%, 100% { opacity: .15; } 48% { opacity: .65; } }
+  @keyframes portrait-sparkle { 0%, 18%, 75%, 100% { opacity: .08; transform: scale(.4); } 42% { opacity: 1; transform: scale(1.25); } 58% { opacity: .4; transform: scale(.8); } }
+  @keyframes glass-crack { 0% { opacity: 0; } 12%, 55% { opacity: 1; } 100% { opacity: 0; } }
+  @keyframes glass-fall { 0% { opacity: 1; transform: translate(0, 0) rotate(0deg); } 100% { opacity: 0; transform: translate(var(--shard-x), 160px) rotate(var(--shard-turn)); } }
+  @media (max-width: 600px) { .magic-portrait { justify-self: center; } }
+  @media (prefers-reduced-motion: reduce) {
+    .portrait-frame { transform: none; transition: none; }
+    .portrait-photo { animation: none; }
+    .spark, .portrait-frame::after { animation-duration: 6s; }
+    [data-shattered="true"] .glass-shards polygon { animation: none; opacity: 0; }
+    [data-shattered="true"] .glass-cracks { animation: none; opacity: 1; }
+  }
+  @media print {
+    .portrait-frame { transform: none; box-shadow: none; }
+    .portrait-photo { animation: none; }
+    .portrait-sparks, .portrait-frame::after, .broken-glass { display: none; }
+  }
+</style>
