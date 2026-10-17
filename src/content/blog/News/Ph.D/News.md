@@ -1,5 +1,5 @@
 ---
-title: "Yechan Kim Awarded Ph.D. and Outstanding Research Award at GIST"
+title: "Awarded Ph.D. and Outstanding Research Award at GIST"
 description: "Congrat! 🎉"
 publishedAt: 2026-08-20
 tags: ["News"]
@@ -7,8 +7,8 @@ language: "en"
 draft: false # false로 해야 웹 사이트에 표시됨!
 ---
 
-Yechan Kim earned his **Ph.D.** from the School of Electrical Engineering and Computer Science at GIST on August 20, 2026. 
-In recognition of his outstanding research achievements, he was also selected to represent the GIST EECS and received the **Outstanding Research Award** from the President of GIST.
+I earned my **Ph.D.** degree from the School of Electrical Engineering and Computer Science (EECS) at GIST on August 20, 2026. 
+In recognition of my outstanding research achievements, I was also selected to represent the GIST EECS and received the **Outstanding Research Award** from the President of GIST.
 
 
 <style>
