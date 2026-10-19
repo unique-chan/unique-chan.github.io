@@ -36,25 +36,6 @@ export const publications: Publication[] = [
     featured: false
   },
 
-    {
-    title: "ShadowCast: On-the-Fly Context-Aware Shadow Augmentation for Remote Sensing Image Segmentation",
-    authors: "Dongho Yoon, Yechan Kim✝, Jongmin Joo, JongHyun Park, Moongu Jeon✝",
-    venue: "Under review of 1st revision for IEEE Geoscience and Remote Sensing Letters (GRSL)",
-    year: 2026,
-    type: "Journal",
-    image: "/paper_snapshots/shadowcast.png",
-    // imageAlt: "-",
-    ranking: "Q1",
-    // citations: 0,
-    tags: ["Semantic Segmentation", "Shadow-robust", "Augmentation"],
-    links: [
-      // { label: "Paper", href: "https://doi.org/10.1145/3767308.3834743" },
-      // { label: "Code", href: "https://unique-chan.github.io/G-MAD-Project/" },
-      // { label: "Dataset", href: "https://unique-chan.github.io/AMOD-Project/" }
-
-    ],
-    featured: false
-  },
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -186,6 +167,31 @@ export const publications: Publication[] = [
     ],
     featured: false
   },
+
+    {
+    title: "ShadowCast: On-the-Fly Context-Aware Shadow Augmentation for Remote Sensing Image Segmentation",
+    authors: "Dongho Yoon, Yechan Kim✝, Jongmin Joo, JongHyun Park, Moongu Jeon✝",
+    venue: "Under review of 1st revision for IEEE Geoscience and Remote Sensing Letters (GRSL)",
+    year: 2026,
+    type: "Journal",
+    image: "/paper_snapshots/shadowcast.png",
+    // imageAlt: "-",
+    ranking: "Q1",
+    // citations: 0,
+    tags: ["Semantic Segmentation", "Shadow-robust", "Augmentation"],
+    links: [
+      { label: "Paper", href: "#" },
+      { label: "Supp. Material (Arxiv)", href: "https://arxiv.org/abs/2610.23440" },
+      // { label: "Code", href: "https://unique-chan.github.io/G-MAD-Project/" },
+      // { label: "Dataset", href: "https://unique-chan.github.io/AMOD-Project/" }
+
+    ],
+    featured: false
+  },
+
+
+
+
 
   {
     title: "NSegment: Label-specific Deformations for Remote Sensing Image Segmentation",
