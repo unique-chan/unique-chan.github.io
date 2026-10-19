@@ -38,13 +38,13 @@ export const publications: Publication[] = [
 
     {
     title: "ShadowCast: On-the-Fly Context-Aware Shadow Augmentation for Remote Sensing Image Segmentation",
-    authors: "Dongho Yoon, Yechan Kim✝, JongHyun Park, Jongmin Joo, Moongu Jeon✝",
-    venue: "Submitted to IEEE",
+    authors: "Dongho Yoon, Yechan Kim✝, Jongmin Joo, JongHyun Park, Moongu Jeon✝",
+    venue: "Under review of 1st revision for IEEE Geoscience and Remote Sensing Letters (GRSL)",
     year: 2026,
-    type: "Preprint",
-    // image: "/paper_snapshots/gmad.png",
+    type: "Journal",
+    image: "/paper_snapshots/shadowcast.png",
     // imageAlt: "-",
-    // ranking: "CORE A*",
+    ranking: "Q1",
     // citations: 0,
     tags: ["Semantic Segmentation", "Shadow-robust", "Augmentation"],
     links: [
