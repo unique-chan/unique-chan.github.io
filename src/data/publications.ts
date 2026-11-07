@@ -139,7 +139,7 @@ export const publications: Publication[] = [
     // citations: 0,
     tags: ["Object Detection", "RGB-T", "Multi-View", "Benchmark"],
     links: [
-      { label: "Paper", href: "https://doi.org/10.1145/3767308.3834743" },
+      { label: "Paper", href: "https://dl.acm.org/doi/10.1145/3767308.3834743" },
       { label: "Supp. Material (Arxiv)", href: "https://arxiv.org/pdf/2607.19942" },
       { label: "Code", href: "https://unique-chan.github.io/G-MAD-Project/" },
       { label: "Dataset", href: "https://unique-chan.github.io/AMOD-Project/" }
