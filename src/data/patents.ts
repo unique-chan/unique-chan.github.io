@@ -13,11 +13,11 @@ export type Patent = {
 // Source: https://sites.google.com/view/mlv/publications/patent-software
 export const patents: Patent[] = [
   {
-    title: "장면 맥락 기반 실시간 그림자 합성을 이용한 원격탐사 영상 분할 모델 학습 방법 (가제, LIG)",
+    title: "원격탐사 영상의 영역 분할 모델 학습 방법 및 장치",
     inventors: "김예찬, 정남훈",
     country: "KOR",
-    filingNumber: "#",
-    filingDate: "#",
+    filingNumber: "10-2026-0236141",
+    filingDate: "2026.11.23",
     year: 2026,
     status: "Filed",
     links: []
